@@ -5,10 +5,6 @@ using System.Runtime.Serialization;
 namespace AARPG.Core.JSON{
 	[DataContract]
 	public class NPCStatisticsDatabaseEntryJSON{
-		[DataMember(Name = "type")]
-		[DefaultValue(0)]
-		public int ID{ get; set; }
-
 		[DataMember(Name = "prefix")]
 		[DefaultValue(null)]
 		public string NamePrefix{ get; set; }

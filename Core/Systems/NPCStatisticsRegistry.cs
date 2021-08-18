@@ -52,6 +52,7 @@ namespace AARPG.Core.Systems{
 				["post-eye"] = Conditions.PostBoss1,
 				["post-evil"] = Conditions.PostBoss2,
 				["post-skel"] = Conditions.PostBoss3,
+				["pre-wof"] = Conditions.PreWoF,
 				["post-wof"] = Conditions.PostWoF,
 				["post-mech"] = Conditions.PostMech,
 				["post-plant"] = Conditions.PostPlant,

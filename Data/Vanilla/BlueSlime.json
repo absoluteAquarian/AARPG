@@ -1,7 +1,6 @@
 ﻿{
 	"entries": [
 		{
-			"type": 1,
 			"prefix": null,
 			"weight": 5.0,
 			"stats": {
@@ -37,7 +36,6 @@
 			}
 		},
 		{
-			"type": 1,
 			"prefix": "Bulky",
 			"weight": 0.75,
 			"stats": {
@@ -73,7 +71,6 @@
 			}
 		},
 		{
-			"type": 1,
 			"prefix": "Tiny",
 			"weight": 1.8,
 			"stats": {
