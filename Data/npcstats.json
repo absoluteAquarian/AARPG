@@ -1,0 +1,112 @@
+﻿{
+	"entries": [
+		{
+			"type": 1,
+			"prefix": null,
+			"weight": 5.0,
+			"stats": {
+				"level": 2,
+				"xp": 4,
+				"mod": {
+					"hp": {
+						"add": 0,
+						"mult": 1,
+						"flat": 0
+					},
+					"defense": {
+						"add": 0,
+						"mult": 1,
+						"flat": 0
+					},
+					"endure": {
+						"add": 0,
+						"mult": 1,
+						"flat": 0
+					},
+					"scale": {
+						"add": 0,
+						"mult": 1,
+						"flat": 0
+					},
+					"value": {
+						"add": 0,
+						"mult": 1,
+						"flat": 0
+					}
+				}
+			}
+		},
+		{
+			"type": 1,
+			"prefix": "Bulky",
+			"weight": 0.75,
+			"stats": {
+				"level": 3,
+				"xp": 5,
+				"mod": {
+					"hp": {
+						"add": 0,
+						"mult": 1.15,
+						"flat": 0
+					},
+					"defense": {
+						"add": 0,
+						"mult": 1,
+						"flat": 0
+					},
+					"endure": {
+						"add": 0,
+						"mult": 1,
+						"flat": 0
+					},
+					"scale": {
+						"add": 0,
+						"mult": 1.3,
+						"flat": 0
+					},
+					"value": {
+						"add": 0,
+						"mult": 1,
+						"flat": 0
+					}
+				}
+			}
+		},
+		{
+			"type": 1,
+			"prefix": "Tiny",
+			"weight": 1.8,
+			"stats": {
+				"level": 2,
+				"xp": 3,
+				"mod": {
+					"hp": {
+						"add": 0,
+						"mult": 0.9,
+						"flat": 0
+					},
+					"defense": {
+						"add": 0,
+						"mult": 1,
+						"flat": 0
+					},
+					"endure": {
+						"add": 0,
+						"mult": 1,
+						"flat": 0
+					},
+					"scale": {
+						"add": 0,
+						"mult": 0.8,
+						"flat": 0
+					},
+					"value": {
+						"add": 0,
+						"mult": 1,
+						"flat": 0
+					}
+				}
+			}
+		}
+	]
+}

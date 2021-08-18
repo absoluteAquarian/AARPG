@@ -1,0 +1,3 @@
+displayName = Absolute RPG
+author = absoluteAquarian
+version = 1.0
