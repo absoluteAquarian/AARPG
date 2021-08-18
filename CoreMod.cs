@@ -1,4 +1,5 @@
 using AARPG.API.Edits;
+using AARPG.API.Sorting;
 using AARPG.Core.Mechanics;
 using AARPG.Core.Systems;
 using AARPG.Core.Utility.Extensions;
@@ -17,6 +18,8 @@ namespace AARPG{
 
 			EditsLoader.Load();
 
+			NPCProgressionRegistry.Load();
+
 			NPCStatisticsRegistry.Load();
 
 			InterfaceSystem.LoadStatic();
@@ -30,6 +33,8 @@ namespace AARPG{
 			InterfaceSystem.UnloadStatic();
 
 			NPCStatisticsRegistry.Unload();
+
+			NPCProgressionRegistry.Unload();
 		}
 
 		public override object Call(params object[] args){

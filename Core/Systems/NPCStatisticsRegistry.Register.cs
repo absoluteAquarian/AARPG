@@ -15,8 +15,8 @@ namespace AARPG.Core.Systems{
 			public static bool PostBoss1() => NPC.downedBoss1;
 			public static bool PostBoss2() => NPC.downedBoss2;
 			public static bool PostBoss3() => NPC.downedBoss3;
-			public static bool PreWoF() => !Main.hardMode;
-			public static bool PostWoF() => Main.hardMode;
+			public static bool PreHardmode() => !Main.hardMode;
+			public static bool Hardmode() => Main.hardMode;
 			public static bool PostMech() => NPC.downedMechBossAny;
 			public static bool PostPlant() => NPC.downedPlantBoss;
 			public static bool PostGolem() => NPC.downedGolemBoss;
