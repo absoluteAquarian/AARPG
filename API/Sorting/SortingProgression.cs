@@ -38,11 +38,11 @@
 		/// <summary>
 		/// Available on the surface of the Corruption
 		/// </summary>
-		PreHardmodeCorruptionSurface,
+		PreHardmodeCorruption,
 		/// <summary>
 		/// Available on the surface of the Crimson
 		/// </summary>
-		PreHardmodeCrimsonSurface,
+		PreHardmodeCrimson,
 		/// <summary>
 		/// Available while in the Caverns layer
 		/// </summary>

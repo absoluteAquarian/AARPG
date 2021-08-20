@@ -20,8 +20,14 @@ namespace AARPG.Core.Mechanics{
 		public Modifier kbResistModifier = Modifier.Default;
 
 		public void ApplyTo(NPC npc){
+			//For NPCs that transform, carry over the current life instead of setting it
+			bool freshlySpawned = npc.life == npc.lifeMax;
+
 			healthModifier.ApplyModifier(ref npc.lifeMax);
-			npc.life = npc.lifeMax;
+
+			if(freshlySpawned)
+				npc.life = npc.lifeMax;
+			
 			defenseModifier.ApplyModifier(ref npc.defDefense);
 			
 			if(npc.TryGetGlobalNPC<StatNPC>(out var statNPC))

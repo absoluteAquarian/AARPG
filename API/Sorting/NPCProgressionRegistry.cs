@@ -73,6 +73,61 @@ namespace AARPG.API.Sorting{
 			NPCID.HornetStingy
 		};
 
+		//Used to indicate what NPCs should be ignored when assigning registry stats in SetDefaults due to them transforming from another NPC
+		//NOTE: in the case of the Vampire, the NPC that's intially spawned is NPCID.Vampire
+		internal static readonly List<int> TransformingNPCs = new(){
+			NPCID.VampireBat,
+			NPCID.Vampire,
+			NPCID.BlackRecluseWall,
+			NPCID.WallCreeperWall,
+			NPCID.JungleCreeperWall,
+			NPCID.BloodCrawlerWall,
+			NPCID.DesertScorpionWall,
+			NPCID.Nymph,
+			NPCID.RayGunner,
+			NPCID.SolarSpearman,
+			NPCID.MothronSpawn,
+			NPCID.LihzahrdCrawler,
+			NPCID.NutcrackerSpinning
+		};
+
+		//The dictionary that's used to indicate what ID an NPC considers the "head" type in the case of worms
+		//Does not contain the Eater of Worlds due to its splitting nature
+		internal static readonly Dictionary<int, int> NonSeparableWormNPCToHead = new(){
+			[NPCID.GiantWormBody] = NPCID.GiantWormHead,
+			[NPCID.GiantWormTail] = NPCID.GiantWormHead,
+			[NPCID.DevourerBody] = NPCID.DevourerHead,
+			[NPCID.DevourerTail] = NPCID.DevourerHead,
+			[NPCID.BoneSerpentBody] = NPCID.BoneSerpentHead,
+			[NPCID.BoneSerpentTail] = NPCID.BoneSerpentHead,
+			[NPCID.WyvernLegs] = NPCID.WyvernHead,
+			[NPCID.WyvernBody] = NPCID.WyvernHead,
+			[NPCID.WyvernBody2] = NPCID.WyvernHead,
+			[NPCID.WyvernBody3] = NPCID.WyvernHead,
+			[NPCID.WyvernTail] = NPCID.WyvernHead,
+			[NPCID.DiggerBody] = NPCID.DiggerHead,
+			[NPCID.DiggerTail] = NPCID.DiggerHead,
+			[NPCID.LeechBody] = NPCID.LeechHead,
+			[NPCID.LeechTail] = NPCID.LeechHead,
+			[NPCID.TheDestroyerBody] = NPCID.TheDestroyer,
+			[NPCID.TheDestroyerTail] = NPCID.TheDestroyer,
+			[NPCID.StardustWormBody] = NPCID.StardustWormHead,
+			[NPCID.StardustWormTail] = NPCID.StardustWormHead,
+			[NPCID.SolarCrawltipedeBody] = NPCID.SolarCrawltipedeHead,
+			[NPCID.SolarCrawltipedeTail] = NPCID.SolarCrawltipedeHead,
+			[NPCID.CultistDragonBody1] = NPCID.CultistDragonHead,
+			[NPCID.CultistDragonBody2] = NPCID.CultistDragonHead,
+			[NPCID.CultistDragonBody3] = NPCID.CultistDragonHead,
+			[NPCID.CultistDragonBody4] = NPCID.CultistDragonHead,
+			[NPCID.CultistDragonTail] = NPCID.CultistDragonHead,
+			[NPCID.DuneSplicerBody] = NPCID.DuneSplicerHead,
+			[NPCID.DuneSplicerTail] = NPCID.DuneSplicerHead,
+			[NPCID.TombCrawlerBody] = NPCID.TombCrawlerHead,
+			[NPCID.TombCrawlerTail] = NPCID.TombCrawlerHead,
+			[NPCID.BloodEelBody] = NPCID.BloodEelHead,
+			[NPCID.BloodEelTail] = NPCID.BloodEelHead
+		};
+
 		public static Dictionary<SortingProgression, List<short>> idsByProgression;
 
 		internal static void Load(){
@@ -144,6 +199,63 @@ namespace AARPG.API.Sorting{
 				NPCID.UmbrellaSlime,
 				NPCID.ZombieRaincoat
 			};
+
+			idsByProgression[SortingProgression.PreHardmodeUnderground] = new(){
+				NPCID.GiantWormHead,
+				NPCID.BlueSlime,
+				NPCID.RedSlime,
+				NPCID.YellowSlime,
+				NPCID.Pinky,
+				NPCID.BlueJellyfish
+			};
+
+			idsByProgression[SortingProgression.SandstormEvent] = new(){
+				NPCID.Tumbleweed,
+				NPCID.TombCrawlerHead
+			};
+
+			idsByProgression[SortingProgression.PreHardmodeCorruption] = new(){
+				NPCID.DevourerHead
+			};
+			idsByProgression[SortingProgression.PreHardmodeCorruption].AddRange(CreateNetIDsFromBaseTypes(NPCID.EaterofSouls));
+
+			idsByProgression[SortingProgression.PreHardmodeCrimson] = new(){
+				NPCID.BloodCrawler,
+				NPCID.FaceMonster
+			};
+			idsByProgression[SortingProgression.PreHardmodeCrimson].AddRange(CreateNetIDsFromBaseTypes(NPCID.Crimera));
+
+			idsByProgression[SortingProgression.PreHardmodeCaverns] = new(){
+				NPCID.BlackSlime,
+				NPCID.MotherSlime,
+				NPCID.BabySlime,
+				NPCID.GiantWormHead,
+				NPCID.SkeletonTopHat,
+				NPCID.SkeletonAstonaut,
+				NPCID.SkeletonAlien,
+				NPCID.CaveBat,
+				NPCID.BlueJellyfish,
+				NPCID.Piranha,
+				NPCID.Salamander,
+				NPCID.Salamander2,
+				NPCID.Salamander3,
+				NPCID.Salamander4,
+				NPCID.Salamander5,
+				NPCID.Salamander6,
+				NPCID.Salamander7,
+				NPCID.Salamander8,
+				NPCID.Salamander9,
+				NPCID.Crawdad,
+				NPCID.Crawdad2,
+				NPCID.GiantShelly,
+				NPCID.GiantShelly2,
+				NPCID.UndeadMiner,
+				NPCID.Tim,
+				NPCID.LostGirl,
+				NPCID.Pinky,
+				NPCID.CochinealBeetle
+			};
+			idsByProgression[SortingProgression.PreHardmodeCaverns].AddRange(CreateNetIDsFromBaseTypes(NPCID.Skeleton, NPCID.HeadacheSkeleton, NPCID.MisassembledSkeleton, NPCID.PantlessSkeleton));
 		}
 
 		private static HashSet<short> CreateNetIDsFromBaseTypes(params short[] ids){
