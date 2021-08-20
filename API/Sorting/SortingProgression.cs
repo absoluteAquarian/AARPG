@@ -20,6 +20,10 @@
 		/// </summary>
 		PreHardmodeSnowSurfaceNight,
 		/// <summary>
+		/// Available on the surface of the Desert
+		/// </summary>
+		DesertSurface,
+		/// <summary>
 		/// Available in the depths of the Snow biome
 		/// </summary>
 		PreHardmodeSnowDepths,
@@ -48,9 +52,13 @@
 		/// </summary>
 		PreHardmodeCaverns,
 		/// <summary>
-		/// Available in the Glowing Mushroom biome
+		/// Available in the Glowing Mushroom biome while on the surface
 		/// </summary>
-		PreHardmodeMushroomBiome,
+		PreHardmodeMushroomBiomeSurface,
+		/// <summary>
+		/// Available in the Glowing Mushroom biome while underground
+		/// </summary>
+		PreHardmodeMushroomBiomeDepths,
 		/// <summary>
 		/// Available while fighting King Slime
 		/// </summary>
@@ -64,13 +72,13 @@
 		/// </summary>
 		BloodMoon,
 		/// <summary>
-		/// Available on the surface of the Desert
-		/// </summary>
-		DesertSurface,
-		/// <summary>
 		/// Available on the surface of the Jungle
 		/// </summary>
 		JungleSurface,
+		/// <summary>
+		/// Available on the surface of the Jungle during nighttime
+		/// </summary>
+		JungleSurfaceNight,
 		/// <summary>
 		/// Available in the Ocean
 		/// </summary>
@@ -94,11 +102,15 @@
 		/// <summary>
 		/// Available in the Sky/Space biome
 		/// </summary>
-		SkyBome,
+		SkyBiome,
 		/// <summary>
 		/// Available in the depths of the Jungle
 		/// </summary>
 		JungleDepths,
+		/// <summary>
+		/// Available in the depths of the Jungle during nighttime
+		/// </summary>
+		JungleDepthsNight,
 		/// <summary>
 		/// Available while fighting Queen Bee
 		/// </summary>
@@ -108,6 +120,10 @@
 		/// </summary>
 		SpiderBiome,
 		/// <summary>
+		/// Available while fighting Skeletron
+		/// </summary>
+		Skeletron,
+		/// <summary>
 		/// Available in the Dungeon after defeating Skeletron
 		/// </summary>
 		Dungeon,
@@ -115,6 +131,10 @@
 		/// Available while in the Underworld
 		/// </summary>
 		PreHardmodeHell,
+		/// <summary>
+		/// Available while fighting the Wall of Flesh
+		/// </summary>
+		WallOfFlesh,
 		/// <summary>
 		/// Available while on the surface during Hardmode
 		/// </summary>
@@ -144,13 +164,17 @@
 		/// </summary>
 		HardmodeSnowSurface,
 		/// <summary>
+		/// Available on the surface of the Desert during Hardmode
+		/// </summary>
+		HardmodeDesertSurface,
+		/// <summary>
 		/// Available on the surface of the Hallow
 		/// </summary>
 		HallowSurface,
 		/// <summary>
 		/// Available in the Sky/Space biome during Hardmode
 		/// </summary>
-		HardmodeSkyBome,
+		HardmodeSkyBiome,
 		/// <summary>
 		/// Available in the depths of the Snow biome during Hardmode
 		/// </summary>
@@ -176,6 +200,10 @@
 		/// </summary>
 		HardmodeSpiderBiome,
 		/// <summary>
+		/// Available in the depths of the Desert during Hardmode
+		/// </summary>
+		HardmodeDesertDepths,
+		/// <summary>
 		/// Available during the Blood Moon event while in Hardmode
 		/// </summary>
 		BloodMoonHardmode,
@@ -198,7 +226,11 @@
 		/// <summary>
 		/// Available on the surface of the Jungle during Hardmode
 		/// </summary>
-		JungleSurfaceHardmode,
+		HardmodeJungleSurface,
+		/// <summary>
+		/// Available on the surface of the Jungle during Hardmode and nighttime
+		/// </summary>
+		HardmodeJungleSurfaceNight,
 		/// <summary>
 		/// Available while fighting Queen Slime
 		/// </summary>
@@ -210,7 +242,11 @@
 		/// <summary>
 		/// Available in the depths of the Jungle during hardmode
 		/// </summary>
-		JungleDepthsHardmode,
+		HardmodeJungleDepths,
+		/// <summary>
+		/// Available in the depths of the Jungle during hardmode and nighttime
+		/// </summary>
+		HardmodeJungleDepthsNight,
 		/// <summary>
 		/// Available during the Pirate Invasion event
 		/// </summary>

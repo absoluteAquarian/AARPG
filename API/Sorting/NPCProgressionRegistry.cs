@@ -173,6 +173,7 @@ namespace AARPG.API.Sorting{
 				NPCID.ZombieXmas,
 				NPCID.ZombieSweater
 			};
+			//All zombies and Demon Eyes
 			idsByProgression[SortingProgression.PreHardmodeSurfaceNight].AddRange(CreateNetIDsFromBaseTypes(NPCID.Zombie, NPCID.BaldZombie, NPCID.PincushionZombie, NPCID.SlimedZombie, NPCID.SwampZombie, NPCID.TwiggyZombie, NPCID.CataractEye, NPCID.SleepyEye, NPCID.DialatedEye, NPCID.GreenEye, NPCID.PurpleEye, NPCID.DemonEye, NPCID.FemaleZombie));
 
 			idsByProgression[SortingProgression.PreHardmodeSnowSurface] = new(){
@@ -182,6 +183,12 @@ namespace AARPG.API.Sorting{
 			idsByProgression[SortingProgression.PreHardmodeSnowSurfaceNight] = new(){
 				NPCID.ZombieEskimo,
 				NPCID.ArmedZombieEskimo
+			};
+
+			idsByProgression[SortingProgression.DesertSurface] = new(){
+				NPCID.SandSlime,
+				NPCID.Vulture,
+				NPCID.Antlion
 			};
 
 			idsByProgression[SortingProgression.PreHardmodeSnowDepths] = new(){
@@ -256,6 +263,145 @@ namespace AARPG.API.Sorting{
 				NPCID.CochinealBeetle
 			};
 			idsByProgression[SortingProgression.PreHardmodeCaverns].AddRange(CreateNetIDsFromBaseTypes(NPCID.Skeleton, NPCID.HeadacheSkeleton, NPCID.MisassembledSkeleton, NPCID.PantlessSkeleton));
+
+			idsByProgression[SortingProgression.PreHardmodeMushroomBiomeSurface] = new(){
+				NPCID.AnomuraFungus,
+				NPCID.FungiBulb,
+				NPCID.MushiLadybug,
+				NPCID.ZombieMushroomHat,
+				NPCID.ZombieMushroom
+			};
+
+			idsByProgression[SortingProgression.PreHardmodeMushroomBiomeDepths] = new(){
+				NPCID.SporeBat,
+				NPCID.SporeSkeleton
+			};
+
+			idsByProgression[SortingProgression.KingSlime] = new(){
+				NPCID.KingSlime,
+				NPCID.SlimeSpiked,
+				NPCID.BlueSlime
+			};
+
+			idsByProgression[SortingProgression.CthulhuEye] = new(){
+				NPCID.EyeofCthulhu
+			};
+
+			idsByProgression[SortingProgression.BloodMoon] = new(){
+				NPCID.TheGroom,
+				NPCID.TheBride,
+				NPCID.BloodZombie,
+				NPCID.Drippler,
+				NPCID.EyeballFlyingFish,
+				NPCID.ZombieMerman
+			};
+
+			idsByProgression[SortingProgression.JungleSurface] = new(){
+				NPCID.JungleSlime,
+				NPCID.JungleBat,
+				NPCID.Piranha,
+				NPCID.Snatcher
+			};
+
+			idsByProgression[SortingProgression.JungleSurfaceNight] = new(){
+				NPCID.JungleBat,
+				NPCID.Piranha,
+				NPCID.Snatcher,
+				NPCID.DoctorBones
+			};
+			//All zombies and Demon Eyes
+			idsByProgression[SortingProgression.JungleSurfaceNight].AddRange(CreateNetIDsFromBaseTypes(NPCID.Zombie, NPCID.BaldZombie, NPCID.PincushionZombie, NPCID.SlimedZombie, NPCID.SwampZombie, NPCID.TwiggyZombie, NPCID.CataractEye, NPCID.SleepyEye, NPCID.DialatedEye, NPCID.GreenEye, NPCID.PurpleEye, NPCID.DemonEye, NPCID.FemaleZombie));
+
+			idsByProgression[SortingProgression.Ocean] = new(){
+				NPCID.PinkJellyfish,
+				NPCID.Crab,
+				NPCID.Squid,
+				NPCID.SeaSnail,
+				NPCID.Shark
+			};
+
+			idsByProgression[SortingProgression.DesertDepths] = new(){
+				NPCID.Antlion,
+				NPCID.WalkingAntlion,
+				NPCID.LarvaeAntlion,
+				NPCID.FlyingAntlion,
+				NPCID.GiantFlyingAntlion,
+				NPCID.GiantWalkingAntlion,
+				NPCID.SandSlime,
+				NPCID.TombCrawlerHead
+			};
+
+			idsByProgression[SortingProgression.EvilBoss] = new(){
+				NPCID.EaterofWorldsHead,
+				NPCID.EaterofWorldsBody,
+				NPCID.EaterofWorldsTail,
+				NPCID.BrainofCthulhu,
+				NPCID.Creeper
+			};
+
+			idsByProgression[SortingProgression.GoblinArmy] = new(){
+				NPCID.GoblinArcher,
+				NPCID.GoblinPeon,
+				NPCID.GoblinScout,
+				NPCID.GoblinSorcerer,
+				NPCID.GoblinThief,
+				NPCID.GoblinWarrior
+			};
+
+			idsByProgression[SortingProgression.DD2Army] = new(){
+				NPCID.DD2GoblinT1,
+				NPCID.DD2GoblinBomberT1,
+				NPCID.DD2JavelinstT1,
+				NPCID.DD2WyvernT1,
+				NPCID.DD2DarkMageT1,
+				NPCID.DD2SkeletonT1
+			};
+
+			idsByProgression[SortingProgression.SkyBiome] = new(){
+				NPCID.Harpy
+			};
+
+			idsByProgression[SortingProgression.JungleDepths] = new(){
+				NPCID.ManEater,
+				NPCID.JungleBat,
+				NPCID.SpikedJungleSlime,
+				NPCID.Piranha,
+				NPCID.LacBeetle
+			};
+			idsByProgression[SortingProgression.JungleDepths].AddRange(CreateNetIDsFromBaseTypes(NPCID.Hornet, NPCID.HornetFatty, NPCID.HornetHoney, NPCID.HornetLeafy, NPCID.HornetSpikey, NPCID.HornetStingy));
+
+			idsByProgression[SortingProgression.JungleDepthsNight] = new(){
+				NPCID.DoctorBones
+			};
+			idsByProgression[SortingProgression.JungleDepthsNight].AddRange(idsByProgression[SortingProgression.JungleDepths]);
+
+			idsByProgression[SortingProgression.QueenBee] = new(){
+				NPCID.QueenBee,
+				NPCID.Bee,
+				NPCID.BeeSmall
+			};
+
+			idsByProgression[SortingProgression.SpiderBiome] = new(){
+				NPCID.WallCreeper
+			};
+
+			idsByProgression[SortingProgression.Skeletron] = new(){
+				NPCID.SkeletronHead
+			};
+
+			idsByProgression[SortingProgression.PreHardmodeHell] = new(){
+				NPCID.Hellbat,
+				NPCID.LavaSlime,
+				NPCID.FireImp,
+				NPCID.Demon,
+				NPCID.VoodooDemon,
+				NPCID.BoneSerpentHead
+			};
+
+			idsByProgression[SortingProgression.WallOfFlesh] = new(){
+				NPCID.WallofFlesh,
+				NPCID.WallofFleshEye
+			};
 		}
 
 		private static HashSet<short> CreateNetIDsFromBaseTypes(params short[] ids){
