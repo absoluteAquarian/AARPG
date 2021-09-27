@@ -534,7 +534,7 @@ namespace AARPG.API.Sorting{
 			};
 			idsByProgression[HardmodeDesertDepths].AddRange(idsByProgression[DesertDepths]);
 
-			// TODO: add more progression stages
+			
 
 			idsByProgression[HardmodeCorruptionDepths] = new(){
 				NPCID.DevourerHead,
