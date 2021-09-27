@@ -148,17 +148,9 @@
 		/// </summary>
 		HardmodeUnderground,
 		/// <summary>
-		/// Available while in the Caverns layer during Hardmode
-		/// </summary>
-		HardmodeCaverns,
-		/// <summary>
 		/// Available in the Glowing Mushroom biome during Hardmode
 		/// </summary>
 		HardmodeMushroomBiome,
-		/// <summary>
-		/// Available while in the Underworld during Hardmode
-		/// </summary>
-		HardmodeHell,
 		/// <summary>
 		/// Available on the surface of the Snow biome during Hardmode
 		/// </summary>
@@ -172,6 +164,14 @@
 		/// </summary>
 		HallowSurface,
 		/// <summary>
+		/// Available on the surface of the Hallow during nighttime
+		/// </summary>
+		HallowSurfaceNight,
+		/// <summary>
+		/// Available while in the Caverns layer during Hardmode
+		/// </summary>
+		HardmodeCaverns,
+		/// <summary>
 		/// Available in the Sky/Space biome during Hardmode
 		/// </summary>
 		HardmodeSkyBiome,
@@ -180,6 +180,14 @@
 		/// </summary>
 		HardmodeSnowDepths,
 		/// <summary>
+		/// Available in the depths of the Corruption during Hardmode
+		/// </summary>
+		HardmodeCorruption,
+		/// <summary>
+		/// Available in the depths of the Crimson during Hardmode
+		/// </summary>
+		HardmodeCrimson,
+		/// <summary>
 		/// Available in the depths of the Hallow
 		/// </summary>
 		HallowDepths,
@@ -187,14 +195,6 @@
 		/// Available during the Goblin Army event while in Hardmode
 		/// </summary>
 		GoblinArmyHardmode,
-		/// <summary>
-		/// Available in the depths of the Corruption during Hardmode
-		/// </summary>
-		HardmodeCorruptionDepths,
-		/// <summary>
-		/// Available in the depths of the Crimson during Hardmode
-		/// </summary>
-		HardmodeCrimsonDepths,
 		/// <summary>
 		/// Available while in a Spider biome during Hardmode
 		/// </summary>
@@ -208,6 +208,10 @@
 		/// </summary>
 		BloodMoonHardmode,
 		/// <summary>
+		/// Available while in the Underworld during Hardmode
+		/// </summary>
+		HardmodeHell,
+		/// <summary>
 		/// Available during the Snowman Legion event
 		/// </summary>
 		SnowmanArmy,
@@ -219,6 +223,14 @@
 		/// Available during the Sandstorm event while in Hardmode
 		/// </summary>
 		HardmodeSandstormEvent,
+		/// <summary>
+		/// Available in the depths of the Corruption during Hardmode
+		/// </summary>
+		HardmodeCorruptionDepths,
+		/// <summary>
+		/// Available in the depths of the Crimson during Hardmode
+		/// </summary>
+		HardmodeCrimsonDepths,
 		/// <summary>
 		/// Available during the Solar Eclipse event
 		/// </summary>

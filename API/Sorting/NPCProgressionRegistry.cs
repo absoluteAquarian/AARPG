@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Terraria.ID;
+using static AARPG.API.Sorting.SortingProgression;
 
 namespace AARPG.API.Sorting{
 	public static class NPCProgressionRegistry{
@@ -144,7 +145,7 @@ namespace AARPG.API.Sorting{
 			//Create a registry of NPC ids based on where they're expected to appear during progression
 			//This will help with the creation of "fallback stats" for the NPC Statistics Registry
 
-			idsByProgression[SortingProgression.PreHardmodeSurface] = new(){
+			idsByProgression[PreHardmodeSurface] = new(){
 				NPCID.GreenSlime,
 				NPCID.BlueSlime,
 				NPCID.PurpleSlime,
@@ -158,7 +159,7 @@ namespace AARPG.API.Sorting{
 				NPCID.Dandelion
 			};
 
-			idsByProgression[SortingProgression.PreHardmodeSurfaceNight] = new(){
+			idsByProgression[PreHardmodeSurfaceNight] = new(){
 				NPCID.Raven,
 				NPCID.ArmedZombie,
 				NPCID.ArmedTorchZombie,
@@ -174,24 +175,24 @@ namespace AARPG.API.Sorting{
 				NPCID.ZombieSweater
 			};
 			//All zombies and Demon Eyes
-			idsByProgression[SortingProgression.PreHardmodeSurfaceNight].AddRange(CreateNetIDsFromBaseTypes(NPCID.Zombie, NPCID.BaldZombie, NPCID.PincushionZombie, NPCID.SlimedZombie, NPCID.SwampZombie, NPCID.TwiggyZombie, NPCID.CataractEye, NPCID.SleepyEye, NPCID.DialatedEye, NPCID.GreenEye, NPCID.PurpleEye, NPCID.DemonEye, NPCID.FemaleZombie));
+			idsByProgression[PreHardmodeSurfaceNight].AddRange(CreateNetIDsFromBaseTypes(NPCID.Zombie, NPCID.BaldZombie, NPCID.PincushionZombie, NPCID.SlimedZombie, NPCID.SwampZombie, NPCID.TwiggyZombie, NPCID.CataractEye, NPCID.SleepyEye, NPCID.DialatedEye, NPCID.GreenEye, NPCID.PurpleEye, NPCID.DemonEye, NPCID.FemaleZombie));
 
-			idsByProgression[SortingProgression.PreHardmodeSnowSurface] = new(){
+			idsByProgression[PreHardmodeSnowSurface] = new(){
 				NPCID.IceSlime
 			};
 
-			idsByProgression[SortingProgression.PreHardmodeSnowSurfaceNight] = new(){
+			idsByProgression[PreHardmodeSnowSurfaceNight] = new(){
 				NPCID.ZombieEskimo,
 				NPCID.ArmedZombieEskimo
 			};
 
-			idsByProgression[SortingProgression.DesertSurface] = new(){
+			idsByProgression[DesertSurface] = new(){
 				NPCID.SandSlime,
 				NPCID.Vulture,
 				NPCID.Antlion
 			};
 
-			idsByProgression[SortingProgression.PreHardmodeSnowDepths] = new(){
+			idsByProgression[PreHardmodeSnowDepths] = new(){
 				NPCID.IceBat,
 				NPCID.SnowFlinx,
 				NPCID.SpikedIceSlime,
@@ -201,13 +202,13 @@ namespace AARPG.API.Sorting{
 				NPCID.Nymph
 			};
 
-			idsByProgression[SortingProgression.RainEvent] = new(){
+			idsByProgression[RainEvent] = new(){
 				NPCID.FlyingFish,
 				NPCID.UmbrellaSlime,
 				NPCID.ZombieRaincoat
 			};
 
-			idsByProgression[SortingProgression.PreHardmodeUnderground] = new(){
+			idsByProgression[PreHardmodeUnderground] = new(){
 				NPCID.GiantWormHead,
 				NPCID.BlueSlime,
 				NPCID.RedSlime,
@@ -216,23 +217,23 @@ namespace AARPG.API.Sorting{
 				NPCID.BlueJellyfish
 			};
 
-			idsByProgression[SortingProgression.SandstormEvent] = new(){
+			idsByProgression[SandstormEvent] = new(){
 				NPCID.Tumbleweed,
 				NPCID.TombCrawlerHead
 			};
 
-			idsByProgression[SortingProgression.PreHardmodeCorruption] = new(){
+			idsByProgression[PreHardmodeCorruption] = new(){
 				NPCID.DevourerHead
 			};
-			idsByProgression[SortingProgression.PreHardmodeCorruption].AddRange(CreateNetIDsFromBaseTypes(NPCID.EaterofSouls));
+			idsByProgression[PreHardmodeCorruption].AddRange(CreateNetIDsFromBaseTypes(NPCID.EaterofSouls));
 
-			idsByProgression[SortingProgression.PreHardmodeCrimson] = new(){
+			idsByProgression[PreHardmodeCrimson] = new(){
 				NPCID.BloodCrawler,
 				NPCID.FaceMonster
 			};
-			idsByProgression[SortingProgression.PreHardmodeCrimson].AddRange(CreateNetIDsFromBaseTypes(NPCID.Crimera));
+			idsByProgression[PreHardmodeCrimson].AddRange(CreateNetIDsFromBaseTypes(NPCID.Crimera));
 
-			idsByProgression[SortingProgression.PreHardmodeCaverns] = new(){
+			idsByProgression[PreHardmodeCaverns] = new(){
 				NPCID.BlackSlime,
 				NPCID.MotherSlime,
 				NPCID.BabySlime,
@@ -262,9 +263,9 @@ namespace AARPG.API.Sorting{
 				NPCID.Pinky,
 				NPCID.CochinealBeetle
 			};
-			idsByProgression[SortingProgression.PreHardmodeCaverns].AddRange(CreateNetIDsFromBaseTypes(NPCID.Skeleton, NPCID.HeadacheSkeleton, NPCID.MisassembledSkeleton, NPCID.PantlessSkeleton));
+			idsByProgression[PreHardmodeCaverns].AddRange(CreateNetIDsFromBaseTypes(NPCID.Skeleton, NPCID.HeadacheSkeleton, NPCID.MisassembledSkeleton, NPCID.PantlessSkeleton));
 
-			idsByProgression[SortingProgression.PreHardmodeMushroomBiomeSurface] = new(){
+			idsByProgression[PreHardmodeMushroomBiomeSurface] = new(){
 				NPCID.AnomuraFungus,
 				NPCID.FungiBulb,
 				NPCID.MushiLadybug,
@@ -272,22 +273,22 @@ namespace AARPG.API.Sorting{
 				NPCID.ZombieMushroom
 			};
 
-			idsByProgression[SortingProgression.PreHardmodeMushroomBiomeDepths] = new(){
+			idsByProgression[PreHardmodeMushroomBiomeDepths] = new(){
 				NPCID.SporeBat,
 				NPCID.SporeSkeleton
 			};
 
-			idsByProgression[SortingProgression.KingSlime] = new(){
+			idsByProgression[KingSlime] = new(){
 				NPCID.KingSlime,
 				NPCID.SlimeSpiked,
 				NPCID.BlueSlime
 			};
 
-			idsByProgression[SortingProgression.CthulhuEye] = new(){
+			idsByProgression[CthulhuEye] = new(){
 				NPCID.EyeofCthulhu
 			};
 
-			idsByProgression[SortingProgression.BloodMoon] = new(){
+			idsByProgression[BloodMoon] = new(){
 				NPCID.TheGroom,
 				NPCID.TheBride,
 				NPCID.BloodZombie,
@@ -296,23 +297,23 @@ namespace AARPG.API.Sorting{
 				NPCID.ZombieMerman
 			};
 
-			idsByProgression[SortingProgression.JungleSurface] = new(){
+			idsByProgression[JungleSurface] = new(){
 				NPCID.JungleSlime,
 				NPCID.JungleBat,
 				NPCID.Piranha,
 				NPCID.Snatcher
 			};
 
-			idsByProgression[SortingProgression.JungleSurfaceNight] = new(){
+			idsByProgression[JungleSurfaceNight] = new(){
 				NPCID.JungleBat,
 				NPCID.Piranha,
 				NPCID.Snatcher,
 				NPCID.DoctorBones
 			};
 			//All zombies and Demon Eyes
-			idsByProgression[SortingProgression.JungleSurfaceNight].AddRange(CreateNetIDsFromBaseTypes(NPCID.Zombie, NPCID.BaldZombie, NPCID.PincushionZombie, NPCID.SlimedZombie, NPCID.SwampZombie, NPCID.TwiggyZombie, NPCID.CataractEye, NPCID.SleepyEye, NPCID.DialatedEye, NPCID.GreenEye, NPCID.PurpleEye, NPCID.DemonEye, NPCID.FemaleZombie));
+			idsByProgression[JungleSurfaceNight].AddRange(CreateNetIDsFromBaseTypes(NPCID.Zombie, NPCID.BaldZombie, NPCID.PincushionZombie, NPCID.SlimedZombie, NPCID.SwampZombie, NPCID.TwiggyZombie, NPCID.CataractEye, NPCID.SleepyEye, NPCID.DialatedEye, NPCID.GreenEye, NPCID.PurpleEye, NPCID.DemonEye, NPCID.FemaleZombie));
 
-			idsByProgression[SortingProgression.Ocean] = new(){
+			idsByProgression[Ocean] = new(){
 				NPCID.PinkJellyfish,
 				NPCID.Crab,
 				NPCID.Squid,
@@ -320,7 +321,7 @@ namespace AARPG.API.Sorting{
 				NPCID.Shark
 			};
 
-			idsByProgression[SortingProgression.DesertDepths] = new(){
+			idsByProgression[DesertDepths] = new(){
 				NPCID.Antlion,
 				NPCID.WalkingAntlion,
 				NPCID.LarvaeAntlion,
@@ -331,7 +332,7 @@ namespace AARPG.API.Sorting{
 				NPCID.TombCrawlerHead
 			};
 
-			idsByProgression[SortingProgression.EvilBoss] = new(){
+			idsByProgression[EvilBoss] = new(){
 				NPCID.EaterofWorldsHead,
 				NPCID.EaterofWorldsBody,
 				NPCID.EaterofWorldsTail,
@@ -339,7 +340,7 @@ namespace AARPG.API.Sorting{
 				NPCID.Creeper
 			};
 
-			idsByProgression[SortingProgression.GoblinArmy] = new(){
+			idsByProgression[GoblinArmy] = new(){
 				NPCID.GoblinArcher,
 				NPCID.GoblinPeon,
 				NPCID.GoblinScout,
@@ -348,7 +349,7 @@ namespace AARPG.API.Sorting{
 				NPCID.GoblinWarrior
 			};
 
-			idsByProgression[SortingProgression.DD2Army] = new(){
+			idsByProgression[DD2Army] = new(){
 				NPCID.DD2GoblinT1,
 				NPCID.DD2GoblinBomberT1,
 				NPCID.DD2JavelinstT1,
@@ -357,39 +358,37 @@ namespace AARPG.API.Sorting{
 				NPCID.DD2SkeletonT1
 			};
 
-			idsByProgression[SortingProgression.SkyBiome] = new(){
+			idsByProgression[SkyBiome] = new(){
 				NPCID.Harpy
 			};
 
-			idsByProgression[SortingProgression.JungleDepths] = new(){
+			idsByProgression[JungleDepths] = new(){
 				NPCID.ManEater,
 				NPCID.JungleBat,
 				NPCID.SpikedJungleSlime,
 				NPCID.Piranha,
 				NPCID.LacBeetle
 			};
-			idsByProgression[SortingProgression.JungleDepths].AddRange(CreateNetIDsFromBaseTypes(NPCID.Hornet, NPCID.HornetFatty, NPCID.HornetHoney, NPCID.HornetLeafy, NPCID.HornetSpikey, NPCID.HornetStingy));
+			idsByProgression[JungleDepths].AddRange(CreateNetIDsFromBaseTypes(NPCID.Hornet, NPCID.HornetFatty, NPCID.HornetHoney, NPCID.HornetLeafy, NPCID.HornetSpikey, NPCID.HornetStingy));
 
-			idsByProgression[SortingProgression.JungleDepthsNight] = new(){
+			idsByProgression[JungleDepthsNight] = new(){
 				NPCID.DoctorBones
 			};
-			idsByProgression[SortingProgression.JungleDepthsNight].AddRange(idsByProgression[SortingProgression.JungleDepths]);
+			idsByProgression[JungleDepthsNight].AddRange(idsByProgression[JungleDepths]);
 
-			idsByProgression[SortingProgression.QueenBee] = new(){
-				NPCID.QueenBee,
-				NPCID.Bee,
-				NPCID.BeeSmall
+			idsByProgression[QueenBee] = new(){
+				NPCID.QueenBee
 			};
 
-			idsByProgression[SortingProgression.SpiderBiome] = new(){
+			idsByProgression[SpiderBiome] = new(){
 				NPCID.WallCreeper
 			};
 
-			idsByProgression[SortingProgression.Skeletron] = new(){
+			idsByProgression[Skeletron] = new(){
 				NPCID.SkeletronHead
 			};
 
-			idsByProgression[SortingProgression.PreHardmodeHell] = new(){
+			idsByProgression[PreHardmodeHell] = new(){
 				NPCID.Hellbat,
 				NPCID.LavaSlime,
 				NPCID.FireImp,
@@ -398,10 +397,157 @@ namespace AARPG.API.Sorting{
 				NPCID.BoneSerpentHead
 			};
 
-			idsByProgression[SortingProgression.WallOfFlesh] = new(){
+			idsByProgression[WallOfFlesh] = new(){
 				NPCID.WallofFlesh,
 				NPCID.WallofFleshEye
 			};
+
+			idsByProgression[HardmodeSurface] = new(){
+				NPCID.Mimic
+			};
+			idsByProgression[HardmodeSurface].AddRange(idsByProgression[PreHardmodeSurface]);
+
+			idsByProgression[HardmodeSurfaceNight] = new(){
+				NPCID.PossessedArmor,
+				NPCID.WanderingEye,
+				NPCID.Wraith,
+				NPCID.Werewolf,
+				NPCID.HoppinJack
+			};
+			idsByProgression[HardmodeSurfaceNight].AddRange(idsByProgression[PreHardmodeSurfaceNight]);
+
+			idsByProgression[HardmodeUnderground] = new(){
+				NPCID.DiggerHead,
+				NPCID.PossessedArmor,
+				NPCID.ToxicSludge,
+				NPCID.GreenJellyfish,
+				NPCID.Mimic
+			};
+			idsByProgression[HardmodeUnderground].AddRange(idsByProgression[PreHardmodeUnderground]);
+
+			idsByProgression[HardmodeMushroomBiome] = new(){
+				NPCID.FungoFish,
+				NPCID.GiantFungiBulb
+			};
+			idsByProgression[HardmodeMushroomBiome].AddRange(idsByProgression[PreHardmodeMushroomBiomeSurface]);
+			idsByProgression[HardmodeMushroomBiome].AddRange(idsByProgression[PreHardmodeMushroomBiomeDepths]);
+
+			idsByProgression[HardmodeSnowSurface] = new();
+			idsByProgression[HardmodeSnowSurface].AddRange(idsByProgression[PreHardmodeSnowSurface]);
+
+			idsByProgression[HardmodeDesertSurface] = new(){
+				NPCID.Mummy,
+				NPCID.LightMummy,
+				NPCID.DarkMummy,
+				NPCID.BloodMummy
+			};
+			idsByProgression[HardmodeDesertSurface].AddRange(idsByProgression[DesertSurface]);
+
+			idsByProgression[HallowSurface] = new(){
+				NPCID.Pixie,
+				NPCID.Unicorn,
+				NPCID.LightMummy
+			};
+
+			idsByProgression[HallowSurfaceNight] = new(){
+				NPCID.Gastropod
+			};
+			idsByProgression[HallowSurfaceNight].AddRange(idsByProgression[HallowSurface]);
+
+			idsByProgression[HardmodeCaverns] = new(){
+				NPCID.DiggerHead,
+				NPCID.GiantBat,
+				NPCID.AnglerFish,
+				NPCID.GreenJellyfish,
+				NPCID.RockGolem,
+				NPCID.SkeletonArcher,
+				NPCID.RuneWizard,
+				NPCID.Mimic
+			};
+			idsByProgression[HardmodeCaverns].AddRange(CreateNetIDsFromBaseTypes(NPCID.ArmoredSkeleton));
+			idsByProgression[HardmodeCaverns].AddRange(idsByProgression[PreHardmodeCaverns]);
+
+			idsByProgression[HardmodeSkyBiome] = new(){
+				NPCID.WyvernHead
+			};
+			idsByProgression[HardmodeSkyBiome].AddRange(idsByProgression[SkyBiome]);
+
+			idsByProgression[HardmodeSnowDepths] = new(){
+				NPCID.ArmoredViking,
+				NPCID.IceTortoise,
+				NPCID.IceElemental,
+				NPCID.IcyMerman,
+				NPCID.IceMimic,
+				NPCID.PigronCorruption,
+				NPCID.PigronCrimson,
+				NPCID.PigronHallow
+			};
+			idsByProgression[HardmodeSnowDepths].AddRange(idsByProgression[PreHardmodeSnowDepths]);
+
+			idsByProgression[HardmodeCorruption] = new(){
+				NPCID.Corruptor,
+				NPCID.CorruptSlime,
+				NPCID.Slimeling,
+				NPCID.Slimer,
+				NPCID.DarkMummy
+			};
+			idsByProgression[HardmodeCorruption].AddRange(CreateNetIDsFromBaseTypes(NPCID.CorruptSlime));
+
+			idsByProgression[HardmodeCrimson] = new(){
+				NPCID.Herpling,
+				NPCID.BloodJelly,
+				NPCID.BloodFeeder,
+				NPCID.BloodMummy
+			};
+			idsByProgression[HardmodeCrimson].AddRange(CreateNetIDsFromBaseTypes(NPCID.Crimslime));
+
+			idsByProgression[HallowDepths] = new(){
+				NPCID.IlluminantSlime,
+				NPCID.IlluminantBat,
+				NPCID.ChaosElemental,
+				NPCID.EnchantedSword,
+				NPCID.BigMimicHallow,
+				NPCID.PigronHallow,
+				NPCID.DesertGhoulHallow
+			};
+
+			idsByProgression[GoblinArmyHardmode] = new(){
+				NPCID.GoblinSummoner
+			};
+			idsByProgression[GoblinArmyHardmode].AddRange(idsByProgression[GoblinArmy]);
+
+			idsByProgression[HardmodeSpiderBiome] = new(){
+				NPCID.BlackRecluse
+			};
+
+			idsByProgression[HardmodeDesertDepths] = new(){
+				NPCID.DesertBeast,
+				NPCID.DesertScorpionWalk,
+				NPCID.DesertLamiaDark,
+				NPCID.DesertLamiaLight,
+				NPCID.DuneSplicerHead,
+				NPCID.DesertGhoul,
+				NPCID.DesertGhoulCorruption,
+				NPCID.DesertGhoulCrimson,
+				NPCID.DesertGhoulHallow,
+				NPCID.DesertDjinn
+			};
+			idsByProgression[HardmodeDesertDepths].AddRange(idsByProgression[DesertDepths]);
+
+			// TODO: add more progression stages
+
+			idsByProgression[HardmodeCorruptionDepths] = new(){
+				NPCID.DevourerHead,
+				NPCID.SeekerHead,
+				NPCID.CursedHammer,
+				NPCID.Clinger,
+				NPCID.Corruptor,
+				NPCID.Slimer,
+				NPCID.BigMimicCorruption,
+				NPCID.PigronCorruption,
+				NPCID.DesertGhoulCorruption
+			};
+			idsByProgression[HardmodeCorruptionDepths].AddRange(CreateNetIDsFromBaseTypes(NPCID.CorruptSlime));
 		}
 
 		private static HashSet<short> CreateNetIDsFromBaseTypes(params short[] ids){
