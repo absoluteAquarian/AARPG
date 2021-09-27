@@ -252,6 +252,10 @@
 		/// </summary>
 		Destroyer,
 		/// <summary>
+		/// Available in the Underworld after defeating a mechanical boss
+		/// </summary>
+		PostMechHell,
+		/// <summary>
 		/// Available in the depths of the Jungle during hardmode
 		/// </summary>
 		HardmodeJungleDepths,

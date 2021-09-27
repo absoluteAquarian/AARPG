@@ -489,7 +489,8 @@ namespace AARPG.API.Sorting{
 				NPCID.CorruptSlime,
 				NPCID.Slimeling,
 				NPCID.Slimer,
-				NPCID.DarkMummy
+				NPCID.DarkMummy,
+				NPCID.Mimic
 			};
 			idsByProgression[HardmodeCorruption].AddRange(CreateNetIDsFromBaseTypes(NPCID.CorruptSlime));
 
@@ -497,7 +498,8 @@ namespace AARPG.API.Sorting{
 				NPCID.Herpling,
 				NPCID.BloodJelly,
 				NPCID.BloodFeeder,
-				NPCID.BloodMummy
+				NPCID.BloodMummy,
+				NPCID.Mimic
 			};
 			idsByProgression[HardmodeCrimson].AddRange(CreateNetIDsFromBaseTypes(NPCID.Crimslime));
 
@@ -508,7 +510,8 @@ namespace AARPG.API.Sorting{
 				NPCID.EnchantedSword,
 				NPCID.BigMimicHallow,
 				NPCID.PigronHallow,
-				NPCID.DesertGhoulHallow
+				NPCID.DesertGhoulHallow,
+				NPCID.Mimic
 			};
 
 			idsByProgression[GoblinArmyHardmode] = new(){
@@ -534,7 +537,43 @@ namespace AARPG.API.Sorting{
 			};
 			idsByProgression[HardmodeDesertDepths].AddRange(idsByProgression[DesertDepths]);
 
-			
+			idsByProgression[BloodMoonHardmode] = new(){
+				NPCID.Clown,
+				NPCID.ChatteringTeethBomb,
+				NPCID.GoblinShark,
+				NPCID.BloodEelHead,
+				NPCID.BloodNautilus,
+				NPCID.BloodSquid
+			};
+			idsByProgression[BloodMoonHardmode].AddRange(idsByProgression[BloodMoon]);
+
+			idsByProgression[HardmodeHell] = new(){
+				NPCID.Mimic
+			};
+			idsByProgression[HardmodeHell].AddRange(idsByProgression[PreHardmodeHell]);
+
+			idsByProgression[SnowmanArmy] = new(){
+				NPCID.MisterStabby,
+				NPCID.SnowmanGangsta,
+				NPCID.SnowBalla
+			};
+
+			idsByProgression[HardmodeRainEvent] = new(){
+				NPCID.AngryNimbus,
+				NPCID.RainbowSlime,
+				NPCID.IceGolem
+			};
+			idsByProgression[RainEvent].AddRange(idsByProgression[RainEvent]);
+
+			idsByProgression[HardmodeSandstormEvent] = new(){
+				NPCID.SandElemental,
+				NPCID.DuneSplicerHead,
+				NPCID.SandShark,
+				NPCID.SandsharkCorrupt,
+				NPCID.SandsharkCrimson,
+				NPCID.SandsharkHallow
+			};
+			idsByProgression[HardmodeSandstormEvent].AddRange(idsByProgression[SandstormEvent]);
 
 			idsByProgression[HardmodeCorruptionDepths] = new(){
 				NPCID.DevourerHead,
@@ -545,9 +584,22 @@ namespace AARPG.API.Sorting{
 				NPCID.Slimer,
 				NPCID.BigMimicCorruption,
 				NPCID.PigronCorruption,
-				NPCID.DesertGhoulCorruption
+				NPCID.DesertGhoulCorruption,
+				NPCID.Mimic
 			};
 			idsByProgression[HardmodeCorruptionDepths].AddRange(CreateNetIDsFromBaseTypes(NPCID.CorruptSlime));
+
+			idsByProgression[HardmodeCrimsonDepths] = new(){
+				NPCID.BloodJelly,
+				NPCID.BloodFeeder,
+				NPCID.CrimsonAxe,
+				NPCID.IchorSticker,
+				NPCID.FloatyGross,
+				NPCID.BigMimicCrimson,
+				NPCID.PigronCrimson,
+				NPCID.DesertGhoulCrimson,
+				NPCID.Mimic
+			};
 		}
 
 		private static HashSet<short> CreateNetIDsFromBaseTypes(params short[] ids){
