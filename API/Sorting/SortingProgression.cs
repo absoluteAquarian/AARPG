@@ -108,6 +108,10 @@
 		/// </summary>
 		EvilBoss,
 		/// <summary>
+		/// Available while in the Meteorite biome
+		/// </summary>
+		MiniBiomeMeteorite,
+		/// <summary>
 		/// Available during the Goblin Army event
 		/// </summary>
 		GoblinArmy,
@@ -331,6 +335,10 @@
 		/// Available while fighting Golem
 		/// </summary>
 		Golem,
+		/// <summary>
+		/// Available while fighting Duke Fishron
+		/// </summary>
+		DukeFishron,
 		/// <summary>
 		/// Available during the Martian Invasion event
 		/// </summary>

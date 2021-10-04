@@ -383,6 +383,10 @@ namespace AARPG.API.Sorting{
 				NPCID.Creeper
 			};
 
+			idsByProgression[MiniBiomeMeteorite] = new(){
+				NPCID.MeteorHead
+			};
+
 			idsByProgression[GoblinArmy] = new(){
 				NPCID.GoblinArcher,
 				NPCID.GoblinPeon,
@@ -771,6 +775,76 @@ namespace AARPG.API.Sorting{
 				NPCID.PrimeLaser,
 				NPCID.PrimeSaw,
 				NPCID.PrimeVice
+			};
+
+			idsByProgression[SolarEclipsePostAllMechs] = new(){
+				NPCID.Reaper
+			};
+			idsByProgression[SolarEclipsePostAllMechs].AddRange(idsByProgression[SolarEclipse]);
+
+			idsByProgression[Plantera] = new(){
+				NPCID.Plantera,
+				NPCID.PlanterasTentacle
+			};
+
+			idsByProgression[PostPlanteraDungeon] = new(){
+				NPCID.BlueArmoredBones,
+				NPCID.BlueArmoredBonesMace,
+				NPCID.BlueArmoredBonesNoPants,
+				NPCID.BlueArmoredBonesSword,
+				NPCID.RustyArmoredBonesAxe,
+				NPCID.RustyArmoredBonesFlail,
+				NPCID.RustyArmoredBonesSword,
+				NPCID.RustyArmoredBonesSwordNoArmor,
+				NPCID.HellArmoredBones,
+				NPCID.HellArmoredBonesMace,
+				NPCID.HellArmoredBonesSpikeShield,
+				NPCID.HellArmoredBonesSword,
+				NPCID.Paladin,
+				NPCID.Necromancer,
+				NPCID.NecromancerArmored,
+				NPCID.RaggedCaster,
+				NPCID.RaggedCasterOpenCoat,
+				NPCID.DiabolistRed,
+				NPCID.DiabolistWhite,
+				NPCID.SkeletonCommando,
+				NPCID.SkeletonSniper,
+				NPCID.TacticalSkeleton,
+				NPCID.GiantCursedSkull,
+				NPCID.BoneLee,
+				NPCID.DungeonSpirit
+			};
+
+			idsByProgression[SolarEclipsePostPlantera] = new(){
+				NPCID.MothronEgg,
+				NPCID.Mothron,
+				NPCID.Butcher,
+				NPCID.DeadlySphere,
+				NPCID.DrManFly,
+				NPCID.Nailhead,
+				NPCID.Psycho
+			};
+			idsByProgression[SolarEclipsePostPlantera].AddRange(idsByProgression[SolarEclipsePostAllMechs]);
+
+			idsByProgression[Empress] = new(){
+				NPCID.HallowBoss
+			};
+
+			idsByProgression[LihzahrdTemple] = new(){
+				NPCID.Lihzahrd,
+				NPCID.FlyingSnake
+			};
+
+			idsByProgression[Golem] = new(){
+				NPCID.Golem,
+				NPCID.GolemFistLeft,
+				NPCID.GolemFistRight
+			};
+
+			idsByProgression[DukeFishron] = new(){
+				NPCID.DukeFishron,
+				NPCID.Sharkron,
+				NPCID.Sharkron2
 			};
 		}
 
