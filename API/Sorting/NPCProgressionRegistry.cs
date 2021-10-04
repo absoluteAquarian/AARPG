@@ -1,10 +1,88 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using Terraria;
+using Terraria.GameContent.Events;
 using Terraria.ID;
+using Terraria.ModLoader;
 using static AARPG.API.Sorting.SortingProgression;
 
 namespace AARPG.API.Sorting{
 	public static class NPCProgressionRegistry{
+		public static class ZoneHelpers{
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			public static bool SurfaceOrSky(Player player)
+				=> player.ZoneOverworldHeight || player.ZoneSkyHeight;
+
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			public static bool SurfaceOrSkyOrUnderground(Player player)
+				=> player.ZoneOverworldHeight || player.ZoneSkyHeight;
+
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			public static bool UndergroundOrCaverns(Player player)
+				=> player.ZoneDirtLayerHeight || player.ZoneRockLayerHeight;
+
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			public static bool NoEvents(Player player)
+				=> Main.invasionType == InvasionID.None
+					&& !Main.snowMoon && !Main.pumpkinMoon
+					&& !Main.eclipse
+					&& !player.ZoneTowerNebula && !player.ZoneTowerSolar && !player.ZoneTowerStardust && !player.ZoneTowerVortex;
+
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			public static bool SurfacePurity(Player player)
+				=> SurfaceOrSky(player) && NoEvents(player) && player.ZonePurity;
+
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			public static bool SurfaceSnow(Player player)
+				=> SurfaceOrSky(player) && NoEvents(player) && player.ZoneSnow;
+
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			public static bool SurfaceCorruption(Player player)
+				=> SurfaceOrSkyOrUnderground(player) && NoEvents(player) && player.ZoneCorrupt;
+
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			public static bool SurfaceCrimson(Player player)
+				=> SurfaceOrSkyOrUnderground(player) && NoEvents(player) && player.ZoneCrimson;
+
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			public static bool SurfaceJungle(Player player)
+				=> SurfaceOrSky(player) && NoEvents(player) && player.ZoneJungle;
+
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			public static bool SurfaceHallow(Player player)
+				=> SurfaceOrSkyOrUnderground(player) && NoEvents(player) && player.ZoneHallow && Main.hardMode;
+
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			public static bool SurfaceDesert(Player player)
+				=> SurfaceOrSky(player) && NoEvents(player) && player.ZoneDesert;
+
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			public static bool DepthsJungle(Player player)
+				=> UndergroundOrCaverns(player) && NoEvents(player) && player.ZoneJungle;
+
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			public static bool DepthsCorruption(Player player)
+				=> player.ZoneRockLayerHeight && NoEvents(player) && player.ZoneCorrupt && Main.hardMode;
+
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			public static bool DepthsCrimson(Player player)
+				=> player.ZoneRockLayerHeight && NoEvents(player) && player.ZoneCrimson && Main.hardMode;
+
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			public static bool DepthsSnow(Player player)
+				=> UndergroundOrCaverns(player) && NoEvents(player) && player.ZoneSnow;
+
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			public static bool DepthsDesert(Player player)
+				=> UndergroundOrCaverns(player) && NoEvents(player) && player.ZoneUndergroundDesert;
+
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			public static bool Underworld(Player player)
+				=> player.ZoneUnderworldHeight && NoEvents(player);
+		}
+
 		//Copied from Terraria.ID.NPCID.cs
 		private static readonly int[] NetIdMap = new int[65]{
 			NPCID.CorruptSlime,
@@ -137,6 +215,8 @@ namespace AARPG.API.Sorting{
 
 		public static Dictionary<SortingProgression, List<short>> idsByProgression;
 
+		public static Dictionary<short, List<SortingProgression>> idsToProgressions;
+
 		internal static void Load(){
 			idsByProgression = new();
 
@@ -146,11 +226,115 @@ namespace AARPG.API.Sorting{
 			foreach(var progression in Enum.GetValues<SortingProgression>())
 				if(!idsByProgression.ContainsKey(progression))
 					throw new Exception($"Progression value \"{nameof(SortingProgression)}.{progression}\" does not have an entry");
+
+			idsToProgressions = new();
+			for(short i = 0; i < NPCLoader.NPCCount; i++)
+				idsToProgressions[i] = idsByProgression.Where(kvp => kvp.Value.Contains(i)).Select(kvp => kvp.Key).ToList();
 		}
 
 		internal static void Unload(){
 			idsByProgression = null;
+			idsToProgressions = null;
 		}
+
+		public static bool CanUseEntriesAtProgressionStage(SortingProgression progression, short spawningNPC, Player player)
+			=> progression switch{
+				PreHardmodeSurface => ZoneHelpers.SurfacePurity(player) && !Main.hardMode && Main.dayTime,
+				PreHardmodeSurfaceNight => ZoneHelpers.SurfacePurity(player) && !Main.hardMode && !Main.dayTime,
+				PreHardmodeSnowSurface => ZoneHelpers.SurfaceSnow(player) && !Main.hardMode && Main.dayTime,
+				PreHardmodeSnowSurfaceNight => ZoneHelpers.SurfaceSnow(player) && !Main.hardMode && !Main.dayTime,
+				DesertSurface => ZoneHelpers.SurfaceDesert(player) && !Main.hardMode,
+				PreHardmodeSnowDepths => ZoneHelpers.DepthsSnow(player) && !Main.hardMode,
+				RainEvent => Main.IsItRaining && !Main.hardMode,
+				PreHardmodeUnderground => ZoneHelpers.NoEvents(player) && player.ZoneDirtLayerHeight && !Main.hardMode,
+				SandstormEvent => Sandstorm.Happening && ZoneHelpers.SurfaceDesert(player) && !Main.hardMode,
+				PreHardmodeCorruption => ZoneHelpers.SurfaceCorruption(player) && !Main.hardMode,
+				PreHardmodeCrimson => ZoneHelpers.SurfaceCrimson(player) && !Main.hardMode,
+				PreHardmodeCaverns => ZoneHelpers.NoEvents(player) && player.ZoneRockLayerHeight && !Main.hardMode,
+				PreHardmodeMushroomBiomeSurface => true,
+				PreHardmodeMushroomBiomeDepths => true,
+				MiniBiomeGraveyard => true,
+				KingSlime => true,
+				CthulhuEye => true,
+				BloodMoon => true,
+				JungleSurface => true,
+				JungleSurfaceNight => true,
+				MiniBiomeBeeHive => true,
+				Ocean => true,
+				DesertDepths => true,
+				MiniBiomeGranite => true,
+				MiniBiomeMarble => true,
+				EvilBoss => true,
+				MiniBiomeMeteorite => true,
+				GoblinArmy => true,
+				DD2Army => true,
+				SkyBiome => true,
+				JungleDepths => true,
+				JungleDepthsNight => true,
+				QueenBee => true,
+				SpiderBiome => true,
+				Skeletron => true,
+				Dungeon => true,
+				PreHardmodeHell => true,
+				WallOfFlesh => true,
+				HardmodeSurface => true,
+				HardmodeMiniBiomeGraveyard => true,
+				HardmodeSurfaceNight => true,
+				HardmodeUnderground => true,
+				HardmodeMushroomBiome => true,
+				HardmodeSnowSurface => true,
+				HardmodeDesertSurface => true,
+				HallowSurface => true,
+				HallowSurfaceNight => true,
+				HardmodeCaverns => true,
+				HardmodeMiniBiomeMarble => true,
+				HardmodeSkyBiome => true,
+				HardmodeSnowDepths => true,
+				HardmodeCorruption => true,
+				HardmodeCrimson => true,
+				HallowDepths => true,
+				GoblinArmyHardmode => true,
+				HardmodeSpiderBiome => true,
+				HardmodeDesertDepths => true,
+				BloodMoonHardmode => true,
+				HardmodeHell => true,
+				SnowmanArmy => true,
+				HardmodeRainEvent => true,
+				HardmodeSandstormEvent => true,
+				HardmodeCorruptionDepths => true,
+				HardmodeCrimsonDepths => true,
+				SolarEclipse => true,
+				HardmodeJungleSurface => true,
+				HardmodeJungleSurfaceNight => true,
+				QueenSlime => true,
+				Destroyer => true,
+				PostMechHell => true,
+				HardmodeJungleDepths => true,
+				HardmodeJungleDepthsNight => true,
+				PirateArmy => true,
+				Twins => true,
+				DD2ArmyTier2 => true,
+				SkeletronPrime => true,
+				SolarEclipsePostAllMechs => true,
+				Plantera => true,
+				PostPlanteraDungeon => true,
+				SolarEclipsePostPlantera => true,
+				PumpkinMoon => true,
+				FrostMoon => true,
+				Empress => true,
+				LihzahrdTemple => true,
+				Golem => true,
+				MartianArmy => true,
+				DD2ArmyTier3 => true,
+				DukeFishron => true,
+				Cultist => true,
+				SolarPillar => true,
+				NebulaPillar => true,
+				VortexPillar => true,
+				StardustPillar => true,
+				MoonLord => true,
+				_ => throw new Exception("Unknown progression enum value: " + progression)
+			};
 
 		private static void InitializeRegistry(){
 			//Create a registry of NPC ids based on where they're expected to appear during progression
