@@ -826,6 +826,42 @@ namespace AARPG.API.Sorting{
 			};
 			idsByProgression[SolarEclipsePostPlantera].AddRange(idsByProgression[SolarEclipsePostAllMechs]);
 
+			idsByProgression[PumpkinMoon] = new(){
+				NPCID.Scarecrow1,
+				NPCID.Scarecrow2,
+				NPCID.Scarecrow3,
+				NPCID.Scarecrow4,
+				NPCID.Scarecrow5,
+				NPCID.Scarecrow6,
+				NPCID.Scarecrow7,
+				NPCID.Scarecrow8,
+				NPCID.Scarecrow9,
+				NPCID.Scarecrow10,
+				NPCID.Splinterling,
+				NPCID.Hellhound,
+				NPCID.Poltergeist,
+				NPCID.HeadlessHorseman,
+				NPCID.MourningWood,
+				NPCID.Pumpking
+			};
+
+			idsByProgression[FrostMoon] = new(){
+				NPCID.PresentMimic,
+				NPCID.Flocko,
+				NPCID.GingerbreadMan,
+				NPCID.ZombieElf,
+				NPCID.ZombieElfBeard,
+				NPCID.ZombieElfGirl,
+				NPCID.ElfArcher,
+				NPCID.Nutcracker,
+				NPCID.Yeti,
+				NPCID.ElfCopter,
+				NPCID.Krampus,
+				NPCID.Everscream,
+				NPCID.SantaNK1,
+				NPCID.IceQueen
+			};
+
 			idsByProgression[Empress] = new(){
 				NPCID.HallowBoss
 			};
@@ -841,10 +877,92 @@ namespace AARPG.API.Sorting{
 				NPCID.GolemFistRight
 			};
 
+			idsByProgression[MartianArmy] = new(){
+				NPCID.MartianSaucerCannon,
+				NPCID.MartianSaucerTurret,
+				NPCID.MartianSaucerCore,
+				NPCID.Scutlix,
+				NPCID.ScutlixRider,
+				NPCID.MartianWalker,
+				NPCID.MartianDrone,
+				NPCID.MartianTurret,
+				NPCID.GigaZapper,
+				NPCID.MartianEngineer,
+				NPCID.MartianOfficer,
+				NPCID.RayGunner,
+				NPCID.GrayGrunt,
+				NPCID.BrainScrambler
+			};
+
+			idsByProgression[DD2ArmyTier3] = new(){
+				NPCID.DD2DarkMageT3,
+				NPCID.DD2DrakinT3,
+				NPCID.DD2GoblinBomberT3,
+				NPCID.DD2GoblinT3,
+				NPCID.DD2JavelinstT3,
+				NPCID.DD2KoboldFlyerT3,
+				NPCID.DD2KoboldWalkerT3,
+				NPCID.DD2LightningBugT3,
+				NPCID.DD2OgreT3,
+				NPCID.DD2SkeletonT3,
+				NPCID.DD2WitherBeastT3,
+				NPCID.DD2WyvernT3,
+				NPCID.DD2Betsy
+			};
+
 			idsByProgression[DukeFishron] = new(){
 				NPCID.DukeFishron,
 				NPCID.Sharkron,
 				NPCID.Sharkron2
+			};
+
+			idsByProgression[Cultist] = new(){
+				NPCID.CultistBoss,
+				NPCID.CultistDragonHead,
+				NPCID.AncientCultistSquidhead
+			};
+
+			idsByProgression[SolarPillar] = new(){
+				NPCID.SolarCorite,
+				NPCID.SolarCrawltipedeHead,
+				NPCID.SolarSpearman,
+				NPCID.SolarDrakomire,
+				NPCID.SolarDrakomireRider,
+				NPCID.SolarSolenian,
+				NPCID.SolarSroller,
+				NPCID.LunarTowerSolar
+			};
+
+			idsByProgression[NebulaPillar] = new(){
+				NPCID.NebulaHeadcrab,
+				NPCID.NebulaBeast,
+				NPCID.NebulaBrain,
+				NPCID.NebulaSoldier,
+				NPCID.LunarTowerNebula
+			};
+
+			idsByProgression[VortexPillar] = new(){
+				NPCID.VortexHornet,
+				NPCID.VortexLarva,
+				NPCID.VortexHornetQueen,
+				NPCID.VortexRifleman,
+				NPCID.VortexSoldier,
+				NPCID.LunarTowerVortex
+			};
+
+			idsByProgression[StardustPillar] = new(){
+				NPCID.StardustJellyfishBig,
+				NPCID.StardustWormHead,
+				NPCID.StardustCellBig,
+				NPCID.StardustSoldier,
+				NPCID.StardustSpiderBig,
+				NPCID.StardustSpiderSmall,
+				NPCID.LunarTowerStardust
+			};
+
+			idsByProgression[MoonLord] = new(){
+				NPCID.MoonLordCore,
+				NPCID.MoonLordLeechBlob
 			};
 		}
 

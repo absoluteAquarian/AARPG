@@ -39,39 +39,42 @@ namespace AARPG.Core.Systems{
 			using StreamReader pathsReader = new StreamReader(pathsStream);
 			string[] paths = pathsReader.ReadToEnd().Split("\r\n", StringSplitOptions.RemoveEmptyEntries);
 
+			pathsReader.Dispose();
+			pathsStream.Dispose();
+
 			foreach(var path in paths){
-				Stream jsonStream = CoreMod.Instance.GetFileStream(path);
+				Stream jsonStream = CoreMod.Instance.GetFileStream("Data/" + path);
 				StreamReader jsonReader = new StreamReader(jsonStream);
 				string json = jsonReader.ReadToEnd();
 
 				int nameIDStart = path.IndexOf('/');
 				if(nameIDStart == -1){
 					CoreMod.Instance.Logger.Warn($"Registry path was invalid: \"{path}\"");
-					continue;
+					goto disposeStreams;
 				}
 
 				string source = path[..nameIDStart];
 				
 				nameIDStart++;
 
-				string thingName = path[nameIDStart..];
+				string thingName = Path.ChangeExtension(path[nameIDStart..], null);
 
 				int id;
 				if(source == "Vanilla"){
 					if(!NPCID.Search.TryGetId(thingName, out id)){
 						CoreMod.Instance.Logger.Warn($"Registry path \"{path}\" had an invalid vanilla type identifier: \"{thingName}\"");
-						continue;
+						goto disposeStreams;
 					}
 				}else if(ModLoader.TryGetMod(source, out Mod mod)){
 					if(!mod.TryFind(thingName, out ModNPC modNPC)){
 						CoreMod.Instance.Logger.Warn($"Registry path \"{path}\" had an invalid mod type identifier: \"{thingName}\"");
-						continue;
+						goto disposeStreams;
 					}
 
 					id = modNPC.Type;
 				}else{
 					//Mod doesn't exist or wasn't loaded.  Just ignore it
-					continue;
+					goto disposeStreams;
 				}
 
 				NPCStatisticsDatabaseJSON database = JsonConvert.DeserializeObject<NPCStatisticsDatabaseJSON>(json, new JsonSerializerSettings(){
@@ -101,6 +104,7 @@ namespace AARPG.Core.Systems{
 					CoreMod.Instance.Logger.Debug($"Added entry for NPC \"{Lang.GetNPCNameValue(id)}\", Name: {entry.NamePrefix ?? "null"}");
 				}
 
+disposeStreams:
 				jsonReader.Dispose();
 				jsonStream.Dispose();
 			}

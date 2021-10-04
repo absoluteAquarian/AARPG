@@ -324,6 +324,14 @@
 		/// </summary>
 		SolarEclipsePostPlantera,
 		/// <summary>
+		/// Available during the Pumpkin Moon event
+		/// </summary>
+		PumpkinMoon,
+		/// <summary>
+		/// Available during the Frost Moon event
+		/// </summary>
+		FrostMoon,
+		/// <summary>
 		/// Available while fighting the Empress of Light
 		/// </summary>
 		Empress,
@@ -335,10 +343,6 @@
 		/// Available while fighting Golem
 		/// </summary>
 		Golem,
-		/// <summary>
-		/// Available while fighting Duke Fishron
-		/// </summary>
-		DukeFishron,
 		/// <summary>
 		/// Available during the Martian Invasion event
 		/// </summary>
