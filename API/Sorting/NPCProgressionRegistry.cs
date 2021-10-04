@@ -79,16 +79,22 @@ namespace AARPG.API.Sorting{
 		internal static readonly List<int> TransformingNPCs = new(){
 			NPCID.VampireBat,
 			NPCID.Vampire,
+			NPCID.BlackRecluse,
 			NPCID.BlackRecluseWall,
+			NPCID.WallCreeper,
 			NPCID.WallCreeperWall,
+			NPCID.JungleCreeper,
 			NPCID.JungleCreeperWall,
+			NPCID.BloodCrawler,
 			NPCID.BloodCrawlerWall,
+			NPCID.DesertScorpionWalk,
 			NPCID.DesertScorpionWall,
 			NPCID.Nymph,
 			NPCID.RayGunner,
 			NPCID.SolarSpearman,
 			NPCID.MothronSpawn,
 			NPCID.LihzahrdCrawler,
+			NPCID.Nutcracker,
 			NPCID.NutcrackerSpinning
 		};
 
@@ -135,6 +141,11 @@ namespace AARPG.API.Sorting{
 			idsByProgression = new();
 
 			InitializeRegistry();
+
+			//Ensure that each progression enum has an entry
+			foreach(var progression in Enum.GetValues<SortingProgression>())
+				if(!idsByProgression.ContainsKey(progression))
+					throw new Exception($"Progression value \"{nameof(SortingProgression)}.{progression}\" does not have an entry");
 		}
 
 		internal static void Unload(){
@@ -174,8 +185,9 @@ namespace AARPG.API.Sorting{
 				NPCID.ZombieXmas,
 				NPCID.ZombieSweater
 			};
-			//All zombies and Demon Eyes
-			idsByProgression[PreHardmodeSurfaceNight].AddRange(CreateNetIDsFromBaseTypes(NPCID.Zombie, NPCID.BaldZombie, NPCID.PincushionZombie, NPCID.SlimedZombie, NPCID.SwampZombie, NPCID.TwiggyZombie, NPCID.CataractEye, NPCID.SleepyEye, NPCID.DialatedEye, NPCID.GreenEye, NPCID.PurpleEye, NPCID.DemonEye, NPCID.FemaleZombie));
+			idsByProgression[PreHardmodeSurfaceNight].AddZombieVariants();
+			idsByProgression[PreHardmodeSurfaceNight].AddDemonEyeVariants();
+			idsByProgression[PreHardmodeSurfaceNight].AddArmedZombies(includeHalloween: true, includeEskimo: false);
 
 			idsByProgression[PreHardmodeSnowSurface] = new(){
 				NPCID.IceSlime
@@ -278,6 +290,21 @@ namespace AARPG.API.Sorting{
 				NPCID.SporeSkeleton
 			};
 
+			idsByProgression[MiniBiomeGraveyard] = new(){
+				NPCID.MaggotZombie,
+				NPCID.ZombieRaincoat,
+				NPCID.ZombieEskimo,
+				NPCID.TheGroom,
+				NPCID.TheBride,
+				NPCID.Raven,
+				NPCID.Ghost,
+				NPCID.ZombieMushroom,
+				NPCID.ZombieMushroomHat
+			};
+			idsByProgression[MiniBiomeGraveyard].AddZombieVariants();
+			idsByProgression[MiniBiomeGraveyard].AddDemonEyeVariants();
+			idsByProgression[MiniBiomeGraveyard].AddArmedZombies(includeHalloween: true, includeEskimo: true);
+
 			idsByProgression[KingSlime] = new(){
 				NPCID.KingSlime,
 				NPCID.SlimeSpiked,
@@ -310,8 +337,15 @@ namespace AARPG.API.Sorting{
 				NPCID.Snatcher,
 				NPCID.DoctorBones
 			};
-			//All zombies and Demon Eyes
-			idsByProgression[JungleSurfaceNight].AddRange(CreateNetIDsFromBaseTypes(NPCID.Zombie, NPCID.BaldZombie, NPCID.PincushionZombie, NPCID.SlimedZombie, NPCID.SwampZombie, NPCID.TwiggyZombie, NPCID.CataractEye, NPCID.SleepyEye, NPCID.DialatedEye, NPCID.GreenEye, NPCID.PurpleEye, NPCID.DemonEye, NPCID.FemaleZombie));
+			idsByProgression[JungleSurfaceNight].AddZombieVariants();
+			idsByProgression[JungleSurfaceNight].AddDemonEyeVariants();
+			idsByProgression[JungleSurfaceNight].AddArmedZombies(includeHalloween: true, includeEskimo: false);
+
+			idsByProgression[MiniBiomeBeeHive] = new(){
+				NPCID.Bee,
+				NPCID.BeeSmall
+			};
+			idsByProgression[MiniBiomeBeeHive].AddHornetVariants();
 
 			idsByProgression[Ocean] = new(){
 				NPCID.PinkJellyfish,
@@ -330,6 +364,15 @@ namespace AARPG.API.Sorting{
 				NPCID.GiantWalkingAntlion,
 				NPCID.SandSlime,
 				NPCID.TombCrawlerHead
+			};
+
+			idsByProgression[MiniBiomeGranite] = new(){
+				NPCID.GraniteFlyer,
+				NPCID.GraniteGolem
+			};
+
+			idsByProgression[MiniBiomeMarble] = new(){
+				NPCID.GreekSkeleton
 			};
 
 			idsByProgression[EvilBoss] = new(){
@@ -369,7 +412,7 @@ namespace AARPG.API.Sorting{
 				NPCID.Piranha,
 				NPCID.LacBeetle
 			};
-			idsByProgression[JungleDepths].AddRange(CreateNetIDsFromBaseTypes(NPCID.Hornet, NPCID.HornetFatty, NPCID.HornetHoney, NPCID.HornetLeafy, NPCID.HornetSpikey, NPCID.HornetStingy));
+			idsByProgression[JungleDepths].AddHornetVariants();
 
 			idsByProgression[JungleDepthsNight] = new(){
 				NPCID.DoctorBones
@@ -377,7 +420,9 @@ namespace AARPG.API.Sorting{
 			idsByProgression[JungleDepthsNight].AddRange(idsByProgression[JungleDepths]);
 
 			idsByProgression[QueenBee] = new(){
-				NPCID.QueenBee
+				NPCID.QueenBee,
+				NPCID.Bee,
+				NPCID.BeeSmall
 			};
 
 			idsByProgression[SpiderBiome] = new(){
@@ -385,7 +430,19 @@ namespace AARPG.API.Sorting{
 			};
 
 			idsByProgression[Skeletron] = new(){
-				NPCID.SkeletronHead
+				NPCID.SkeletronHead,
+				NPCID.SkeletronHand
+			};
+
+			idsByProgression[Dungeon] = new(){
+				NPCID.AngryBones,
+				NPCID.AngryBonesBig,
+				NPCID.AngryBonesBigHelmet,
+				NPCID.AngryBonesBigMuscle,
+				NPCID.DarkCaster,
+				NPCID.CursedSkull,
+				NPCID.DungeonSlime,
+				NPCID.DungeonGuardian
 			};
 
 			idsByProgression[PreHardmodeHell] = new(){
@@ -399,13 +456,19 @@ namespace AARPG.API.Sorting{
 
 			idsByProgression[WallOfFlesh] = new(){
 				NPCID.WallofFlesh,
-				NPCID.WallofFleshEye
+				NPCID.WallofFleshEye,
+				NPCID.TheHungryII
 			};
 
 			idsByProgression[HardmodeSurface] = new(){
 				NPCID.Mimic
 			};
 			idsByProgression[HardmodeSurface].AddRange(idsByProgression[PreHardmodeSurface]);
+
+			idsByProgression[HardmodeMiniBiomeGraveyard] = new(){
+				NPCID.HoppinJack
+			};
+			idsByProgression[HardmodeMiniBiomeGraveyard].AddRange(idsByProgression[MiniBiomeGraveyard]);
 
 			idsByProgression[HardmodeSurfaceNight] = new(){
 				NPCID.PossessedArmor,
@@ -466,6 +529,11 @@ namespace AARPG.API.Sorting{
 			};
 			idsByProgression[HardmodeCaverns].AddRange(CreateNetIDsFromBaseTypes(NPCID.ArmoredSkeleton));
 			idsByProgression[HardmodeCaverns].AddRange(idsByProgression[PreHardmodeCaverns]);
+
+			idsByProgression[HardmodeMiniBiomeMarble] = new(){
+				NPCID.Medusa
+			};
+			idsByProgression[HardmodeMiniBiomeMarble].AddRange(idsByProgression[MiniBiomeMarble]);
 
 			idsByProgression[HardmodeSkyBiome] = new(){
 				NPCID.WyvernHead
@@ -600,6 +668,110 @@ namespace AARPG.API.Sorting{
 				NPCID.DesertGhoulCrimson,
 				NPCID.Mimic
 			};
+
+			idsByProgression[SolarEclipse] = new(){
+				NPCID.Eyezor,
+				NPCID.Frankenstein,
+				NPCID.SwampThing,
+				NPCID.Vampire,
+				NPCID.CreatureFromTheDeep,
+				NPCID.Fritz,
+				NPCID.ThePossessed
+			};
+
+			idsByProgression[HardmodeJungleSurface] = new(){
+				NPCID.Derpling,
+				NPCID.GiantTortoise,
+				NPCID.AnglerFish,
+				NPCID.Arapaima,
+				NPCID.AngryTrapper
+			};
+			idsByProgression[HardmodeJungleSurface].AddRange(idsByProgression[JungleSurface]);
+
+			idsByProgression[HardmodeJungleSurfaceNight] = new(){
+				NPCID.GiantTortoise,
+				NPCID.GiantFlyingFox,
+				NPCID.AnglerFish,
+				NPCID.Arapaima,
+				NPCID.AngryTrapper
+			};
+			idsByProgression[HardmodeJungleSurfaceNight].AddRange(idsByProgression[JungleSurfaceNight]);
+
+			idsByProgression[QueenSlime] = new(){
+				NPCID.QueenSlimeBoss,
+				NPCID.QueenSlimeMinionBlue,
+				NPCID.QueenSlimeMinionPink,
+				NPCID.QueenSlimeMinionPurple
+			};
+
+			idsByProgression[Destroyer] = new(){
+				NPCID.TheDestroyer,
+				NPCID.TheDestroyerBody,
+				NPCID.TheDestroyerTail,
+				NPCID.Probe
+			};
+
+			idsByProgression[PostMechHell] = new(){
+				NPCID.Lavabat,
+				NPCID.RedDevil
+			};
+			idsByProgression[PostMechHell].AddRange(idsByProgression[HardmodeHell]);
+
+			idsByProgression[HardmodeJungleDepths] = new(){
+				NPCID.JungleCreeper,
+				NPCID.Moth,
+				NPCID.MossHornet,
+				NPCID.AngryTrapper,
+				NPCID.Arapaima,
+				NPCID.GiantTortoise
+			};
+			idsByProgression[HardmodeJungleDepths].AddRange(idsByProgression[JungleDepths]);
+
+			idsByProgression[HardmodeJungleDepthsNight] = new(){
+				NPCID.JungleCreeper,
+				NPCID.Moth,
+				NPCID.MossHornet,
+				NPCID.AngryTrapper,
+				NPCID.Arapaima,
+				NPCID.GiantTortoise
+			};
+			idsByProgression[HardmodeJungleDepthsNight].AddRange(idsByProgression[JungleDepthsNight]);
+
+			idsByProgression[PirateArmy] = new(){
+				NPCID.Parrot,
+				NPCID.PirateCaptain,
+				NPCID.PirateCorsair,
+				NPCID.PirateCrossbower,
+				NPCID.PirateDeadeye,
+				NPCID.PirateDeckhand,
+				NPCID.PirateGhost,
+				NPCID.PirateShip,
+				NPCID.PirateShipCannon
+			};
+
+			idsByProgression[Twins] = new(){
+				NPCID.Spazmatism,
+				NPCID.Retinazer
+			};
+
+			idsByProgression[DD2ArmyTier2] = new(){
+				NPCID.DD2GoblinT2,
+				NPCID.DD2GoblinBomberT2,
+				NPCID.DD2JavelinstT2,
+				NPCID.DD2WyvernT2,
+				NPCID.DD2KoboldFlyerT2,
+				NPCID.DD2KoboldWalkerT2,
+				NPCID.DD2WitherBeastT2,
+				NPCID.DD2OgreT2
+			};
+
+			idsByProgression[SkeletronPrime] = new(){
+				NPCID.SkeletronPrime,
+				NPCID.PrimeCannon,
+				NPCID.PrimeLaser,
+				NPCID.PrimeSaw,
+				NPCID.PrimeVice
+			};
 		}
 
 		private static HashSet<short> CreateNetIDsFromBaseTypes(params short[] ids){
@@ -630,6 +802,33 @@ namespace AARPG.API.Sorting{
 			}
 
 			return set;
+		}
+
+		private static void AddZombieVariants(this List<short> ids){
+			ids.AddRange(CreateNetIDsFromBaseTypes(NPCID.Zombie, NPCID.BaldZombie, NPCID.PincushionZombie, NPCID.SlimedZombie, NPCID.SwampZombie, NPCID.TwiggyZombie, NPCID.FemaleZombie));
+		}
+
+		private static void AddDemonEyeVariants(this List<short> ids){
+			ids.AddRange(CreateNetIDsFromBaseTypes(NPCID.CataractEye, NPCID.SleepyEye, NPCID.DialatedEye, NPCID.GreenEye, NPCID.PurpleEye, NPCID.DemonEye));
+		}
+
+		private static void AddArmedZombies(this List<short> ids, bool includeHalloween, bool includeEskimo){
+			ids.Add(NPCID.ArmedTorchZombie);
+			ids.Add(NPCID.ArmedZombie);
+			ids.Add(NPCID.ArmedZombiePincussion);
+			ids.Add(NPCID.ArmedZombieSlimed);
+			ids.Add(NPCID.ArmedZombieSwamp);
+			ids.Add(NPCID.ArmedZombieTwiggy);
+
+			if(includeHalloween)
+				ids.Add(NPCID.ArmedZombieCenx);
+
+			if(includeEskimo)
+				ids.Add(NPCID.ArmedZombieEskimo);
+		}
+
+		private static void AddHornetVariants(this List<short> ids){
+			ids.AddRange(CreateNetIDsFromBaseTypes(NPCID.Hornet, NPCID.HornetFatty, NPCID.HornetHoney, NPCID.HornetLeafy, NPCID.HornetSpikey, NPCID.HornetStingy));
 		}
 	}
 }

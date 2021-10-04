@@ -60,6 +60,10 @@
 		/// </summary>
 		PreHardmodeMushroomBiomeDepths,
 		/// <summary>
+		/// Available in the Graveyard biome
+		/// </summary>
+		MiniBiomeGraveyard,
+		/// <summary>
 		/// Available while fighting King Slime
 		/// </summary>
 		KingSlime,
@@ -80,6 +84,10 @@
 		/// </summary>
 		JungleSurfaceNight,
 		/// <summary>
+		/// Available in the Bee Hive mini-biome
+		/// </summary>
+		MiniBiomeBeeHive,
+		/// <summary>
 		/// Available in the Ocean
 		/// </summary>
 		Ocean,
@@ -87,6 +95,14 @@
 		/// Available in the depths of the Desert
 		/// </summary>
 		DesertDepths,
+		/// <summary>
+		/// Available in the Granite biome
+		/// </summary>
+		MiniBiomeGranite,
+		/// <summary>
+		/// Available in the Marble biome
+		/// </summary>
+		MiniBiomeMarble,
 		/// <summary>
 		/// Available while fighting the Eater of Worlds or the Brain of Cthulhu
 		/// </summary>
@@ -140,6 +156,10 @@
 		/// </summary>
 		HardmodeSurface,
 		/// <summary>
+		/// Available in the Graveyard biome during Hardmode
+		/// </summary>
+		HardmodeMiniBiomeGraveyard,
+		/// <summary>
 		/// Available while on the surface during Hardmode and nighttime
 		/// </summary>
 		HardmodeSurfaceNight,
@@ -171,6 +191,10 @@
 		/// Available while in the Caverns layer during Hardmode
 		/// </summary>
 		HardmodeCaverns,
+		/// <summary>
+		/// Available in the Marble biome during Hardmode
+		/// </summary>
+		HardmodeMiniBiomeMarble,
 		/// <summary>
 		/// Available in the Sky/Space biome during Hardmode
 		/// </summary>

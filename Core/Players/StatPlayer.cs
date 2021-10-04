@@ -8,17 +8,16 @@ namespace AARPG.Core.Players{
 	public class StatPlayer : ModPlayer{
 		public PlayerStatistics stats;
 
-		public override TagCompound Save()
-			=> new(){
-				["stats"] = stats.SaveToTag()
-			};
+		public override void SaveData(TagCompound tag){
+			tag["stats"] = stats.SaveToTag();
+		}
 
 		public override void Initialize(){
 			stats?.DeInitialize();
 			stats = new PlayerStatistics();
 		}
 
-		public override void Load(TagCompound tag){
+		public override void LoadData(TagCompound tag){
 			if(tag.GetCompound("stats") is TagCompound statTag)
 				stats.LoadFromTag(statTag);
 		}
