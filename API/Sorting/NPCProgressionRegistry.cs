@@ -25,7 +25,8 @@ namespace AARPG.API.Sorting{
 
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
 			public static bool NoEvents(Player player)
-				=> Main.invasionType == InvasionID.None
+				// TODO: figure out what shows/hides the invasion progression thing
+				=> (Main.invasionType == InvasionID.None)
 					&& !Main.snowMoon && !Main.pumpkinMoon
 					&& !Main.eclipse
 					&& !player.ZoneTowerNebula && !player.ZoneTowerSolar && !player.ZoneTowerStardust && !player.ZoneTowerVortex;
@@ -59,6 +60,10 @@ namespace AARPG.API.Sorting{
 				=> SurfaceOrSky(player) && NoEvents(player) && player.ZoneDesert;
 
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			public static bool SurfaceMushroom(Player player)
+				=> SurfaceOrSky(player) && NoEvents(player) && player.ZoneGlowshroom;
+
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
 			public static bool DepthsJungle(Player player)
 				=> UndergroundOrCaverns(player) && NoEvents(player) && player.ZoneJungle;
 
@@ -77,6 +82,10 @@ namespace AARPG.API.Sorting{
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
 			public static bool DepthsDesert(Player player)
 				=> UndergroundOrCaverns(player) && NoEvents(player) && player.ZoneUndergroundDesert;
+
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			public static bool DepthsMushroom(Player player)
+				=> UndergroundOrCaverns(player) && NoEvents(player) && player.ZoneGlowshroom;
 
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
 			public static bool Underworld(Player player)
@@ -251,16 +260,16 @@ namespace AARPG.API.Sorting{
 				PreHardmodeCorruption => ZoneHelpers.SurfaceCorruption(player) && !Main.hardMode,
 				PreHardmodeCrimson => ZoneHelpers.SurfaceCrimson(player) && !Main.hardMode,
 				PreHardmodeCaverns => ZoneHelpers.NoEvents(player) && player.ZoneRockLayerHeight && !Main.hardMode,
-				PreHardmodeMushroomBiomeSurface => true,
-				PreHardmodeMushroomBiomeDepths => true,
-				MiniBiomeGraveyard => true,
-				KingSlime => true,
-				CthulhuEye => true,
-				BloodMoon => true,
-				JungleSurface => true,
-				JungleSurfaceNight => true,
-				MiniBiomeBeeHive => true,
-				Ocean => true,
+				PreHardmodeMushroomBiomeSurface => ZoneHelpers.SurfaceMushroom(player) && !Main.hardMode,
+				PreHardmodeMushroomBiomeDepths => ZoneHelpers.DepthsMushroom(player) && !Main.hardMode,
+				MiniBiomeGraveyard => ZoneHelpers.NoEvents(player) && player.ZoneGraveyard && !Main.hardMode,
+				KingSlime => idsByProgression[KingSlime].Contains(spawningNPC),
+				CthulhuEye => idsByProgression[CthulhuEye].Contains(spawningNPC),
+				BloodMoon => ZoneHelpers.SurfaceOrSky(player) && Main.bloodMoon && !Main.hardMode,
+				JungleSurface => ZoneHelpers.SurfaceJungle(player) && !Main.hardMode && Main.dayTime,
+				JungleSurfaceNight => ZoneHelpers.SurfaceJungle(player) && !Main.hardMode && !Main.dayTime,
+				MiniBiomeBeeHive => CanUseEntriesAtProgressionStage(JungleDepths, spawningNPC, player),
+				Ocean => ZoneHelpers.NoEvents(player) && player.ZoneOverworldHeight && player.ZoneBeach,
 				DesertDepths => true,
 				MiniBiomeGranite => true,
 				MiniBiomeMarble => true,
