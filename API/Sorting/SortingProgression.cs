@@ -196,6 +196,10 @@
 		/// </summary>
 		HardmodeCaverns,
 		/// <summary>
+		/// Available in the Granite biome during Hardmode
+		/// </summary>
+		HardmodeMiniBiomeGranite,
+		/// <summary>
 		/// Available in the Marble biome during Hardmode
 		/// </summary>
 		HardmodeMiniBiomeMarble,

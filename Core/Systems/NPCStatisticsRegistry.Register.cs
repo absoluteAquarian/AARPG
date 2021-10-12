@@ -1,6 +1,8 @@
-﻿using AARPG.Core.JSON;
+﻿using AARPG.API.Sorting;
+using AARPG.Core.JSON;
 using AARPG.Core.Mechanics;
 using Newtonsoft.Json;
+using ReLogic.OS;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,23 +13,9 @@ using Terraria.ModLoader;
 
 namespace AARPG.Core.Systems{
 	public static partial class NPCStatisticsRegistry{
-		public static class Conditions{
-			public static bool PostBoss1() => NPC.downedBoss1;
-			public static bool PostBoss2() => NPC.downedBoss2;
-			public static bool PostBoss3() => NPC.downedBoss3;
-			public static bool PreHardmode() => !Main.hardMode;
-			public static bool Hardmode() => Main.hardMode;
-			public static bool PostMech() => NPC.downedMechBossAny;
-			public static bool PostPlant() => NPC.downedPlantBoss;
-			public static bool PostGolem() => NPC.downedGolemBoss;
-			public static bool PostCultist() => NPC.downedAncientCultist;
-			public static bool PostMoonLord() => NPC.downedMoonlord;
-			public static bool AnyTownNPCActive() => Main.npc.Any(n => n.whoAmI < Main.maxNPCs && n.active && n.townNPC);
-		}
+		internal static Dictionary<string, Func<short, bool>> conditions;
 
-		internal static Dictionary<string, Func<bool>> conditions;
-
-		private static void AddRequirement(ref Func<bool> existing, Func<bool> newRequirement){
+		private static void AddRequirement(ref Func<short, bool> existing, Func<short, bool> newRequirement){
 			if(existing is null)
 				existing = newRequirement;
 			else
@@ -35,6 +23,8 @@ namespace AARPG.Core.Systems{
 		}
 
 		private static void RegisterEntries(){
+			CreateProgressionJSONs();
+
 			using Stream pathsStream = CoreMod.Instance.GetFileStream("Data/paths.txt");
 			using StreamReader pathsReader = new StreamReader(pathsStream);
 			string[] paths = pathsReader.ReadToEnd().Split("\r\n", StringSplitOptions.RemoveEmptyEntries);
@@ -85,7 +75,7 @@ namespace AARPG.Core.Systems{
 				});
 
 				foreach(var entry in database.Database){
-					Func<bool> requirement = null;
+					Func<short, bool> requirement = null;
 					if(entry.RequirementKeys is not null){
 						string[] keys = entry.RequirementKeys.Split(';');
 					
@@ -125,6 +115,61 @@ disposeStreams:
 				healthModifier = Modifier.MultOnly(0.95f),
 				scaleModifier = Modifier.MultOnly(0.9f)
 			});
+		}
+
+		private static void CreateProgressionJSONs(){
+			//If the Mod Sources path exists, update the directory for the jsons
+			string folder = Path.Combine(Platform.Get<IPathService>().GetStoragePath("ModLoader"), "Beta", "Mod Sources", nameof(AARPG), "Data");
+			if(!Directory.Exists(folder))
+				return;
+
+			ModNPC m;
+			var progressionDict = NPCProgressionRegistry.idsToProgressions;
+			foreach(string file in File.ReadAllLines(Path.Combine(folder, "paths.txt"))
+				.Concat(NPCProgressionRegistry.idsToProgressions.Keys.Select(k => k < NPCID.Count
+					? "Vanilla/" + NPCID.Search.GetName(k)
+					: (m = NPCLoader.GetNPC(k)).Mod.Name + "/" + m.FullName[(m.FullName.IndexOf('.') + 1)..]))){
+				NPCStatisticsDatabaseJSON json;
+				string fullPath = Path.Combine(folder, file) + ".json";
+				string modName = Path.GetDirectoryName(file);
+				string npcName = Path.GetFileName(file);
+
+				if(File.Exists(fullPath)){
+					json = JsonConvert.DeserializeObject<NPCStatisticsDatabaseJSON>(File.ReadAllText(fullPath), new JsonSerializerSettings(){
+						MissingMemberHandling = MissingMemberHandling.Ignore,
+						DefaultValueHandling = DefaultValueHandling.Populate
+					});
+				}else if((modName == "Vanilla" && NPCID.Search.TryGetId(npcName, out int id) && progressionDict.TryGetValue((short)id, out var progressions)) || (ModContent.TryFind(file.Replace('/', '.'), out m) && progressionDict.TryGetValue((short)(id = m.Type), out progressions))){
+					json = new(){
+						Database = progressions.Select(p => new NPCStatisticsDatabaseEntryJSON(){
+							NamePrefix = null,
+							Weight = 1f,
+							Stats = GenerateStats(id, p),
+							RequirementKeys = Enum.GetName(p)
+						}).ToList()
+					};
+				}
+			}
+		}
+
+		private static NPCStatistics GenerateStats(int type, SortingProgression progression){
+			
+		}
+
+		private static NPCStatistics GenerateBossStats(int type){
+			NPC npc = new NPC();
+			npc.SetDefaults(type);
+
+			//Modded bosses should have their entries be set manually
+			if(!npc.boss || type >= NPCID.Count)
+				return null;
+
+			return type switch{
+				NPCID.KingSlime => new(){
+					level = 10,
+					xp = 
+				}
+			};
 		}
 	}
 }

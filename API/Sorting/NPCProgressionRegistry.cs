@@ -25,11 +25,9 @@ namespace AARPG.API.Sorting{
 
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
 			public static bool NoEvents(Player player)
-				// TODO: figure out what shows/hides the invasion progression thing
-				=> (Main.invasionType == InvasionID.None)
-					&& !Main.snowMoon && !Main.pumpkinMoon
-					&& !Main.eclipse
-					&& !player.ZoneTowerNebula && !player.ZoneTowerSolar && !player.ZoneTowerStardust && !player.ZoneTowerVortex;
+				=> !Main.invasionProgressNearInvasion
+					|| (SurfaceOrSky(player) && !Main.eclipse && !Main.snowMoon && !Main.pumpkinMoon)
+					|| (!player.ZoneTowerNebula && !player.ZoneTowerSolar && !player.ZoneTowerStardust && !player.ZoneTowerVortex);
 
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
 			public static bool SurfacePurity(Player player)
@@ -74,6 +72,10 @@ namespace AARPG.API.Sorting{
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
 			public static bool DepthsCrimson(Player player)
 				=> player.ZoneRockLayerHeight && NoEvents(player) && player.ZoneCrimson && Main.hardMode;
+
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			public static bool DepthsHallow(Player player)
+				=> player.ZoneRockLayerHeight && NoEvents(player) && player.ZoneHallow && Main.hardMode;
 
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
 			public static bool DepthsSnow(Player player)
@@ -246,15 +248,18 @@ namespace AARPG.API.Sorting{
 			idsToProgressions = null;
 		}
 
-		public static bool CanUseEntriesAtProgressionStage(SortingProgression progression, short spawningNPC, Player player)
-			=> progression switch{
+		public static bool CanUseEntriesAtProgressionStage(SortingProgression progression, short spawningNPC, Player player){
+			if(Main.gameMenu || player is null)
+				return false;
+
+			return progression switch{
 				PreHardmodeSurface => ZoneHelpers.SurfacePurity(player) && !Main.hardMode && Main.dayTime,
 				PreHardmodeSurfaceNight => ZoneHelpers.SurfacePurity(player) && !Main.hardMode && !Main.dayTime,
 				PreHardmodeSnowSurface => ZoneHelpers.SurfaceSnow(player) && !Main.hardMode && Main.dayTime,
 				PreHardmodeSnowSurfaceNight => ZoneHelpers.SurfaceSnow(player) && !Main.hardMode && !Main.dayTime,
 				DesertSurface => ZoneHelpers.SurfaceDesert(player) && !Main.hardMode,
 				PreHardmodeSnowDepths => ZoneHelpers.DepthsSnow(player) && !Main.hardMode,
-				RainEvent => Main.IsItRaining && !Main.hardMode,
+				RainEvent => ZoneHelpers.SurfaceOrSky(player) && Main.IsItRaining && !Main.hardMode,
 				PreHardmodeUnderground => ZoneHelpers.NoEvents(player) && player.ZoneDirtLayerHeight && !Main.hardMode,
 				SandstormEvent => Sandstorm.Happening && ZoneHelpers.SurfaceDesert(player) && !Main.hardMode,
 				PreHardmodeCorruption => ZoneHelpers.SurfaceCorruption(player) && !Main.hardMode,
@@ -270,80 +275,81 @@ namespace AARPG.API.Sorting{
 				JungleSurfaceNight => ZoneHelpers.SurfaceJungle(player) && !Main.hardMode && !Main.dayTime,
 				MiniBiomeBeeHive => CanUseEntriesAtProgressionStage(JungleDepths, spawningNPC, player),
 				Ocean => ZoneHelpers.NoEvents(player) && player.ZoneOverworldHeight && player.ZoneBeach,
-				DesertDepths => true,
-				MiniBiomeGranite => true,
-				MiniBiomeMarble => true,
-				EvilBoss => true,
-				MiniBiomeMeteorite => true,
-				GoblinArmy => true,
-				DD2Army => true,
-				SkyBiome => true,
-				JungleDepths => true,
-				JungleDepthsNight => true,
-				QueenBee => true,
-				SpiderBiome => true,
-				Skeletron => true,
-				Dungeon => true,
-				PreHardmodeHell => true,
-				WallOfFlesh => true,
-				HardmodeSurface => true,
-				HardmodeMiniBiomeGraveyard => true,
-				HardmodeSurfaceNight => true,
-				HardmodeUnderground => true,
-				HardmodeMushroomBiome => true,
-				HardmodeSnowSurface => true,
-				HardmodeDesertSurface => true,
-				HallowSurface => true,
-				HallowSurfaceNight => true,
-				HardmodeCaverns => true,
-				HardmodeMiniBiomeMarble => true,
-				HardmodeSkyBiome => true,
-				HardmodeSnowDepths => true,
-				HardmodeCorruption => true,
-				HardmodeCrimson => true,
-				HallowDepths => true,
-				GoblinArmyHardmode => true,
-				HardmodeSpiderBiome => true,
-				HardmodeDesertDepths => true,
-				BloodMoonHardmode => true,
-				HardmodeHell => true,
-				SnowmanArmy => true,
-				HardmodeRainEvent => true,
-				HardmodeSandstormEvent => true,
-				HardmodeCorruptionDepths => true,
-				HardmodeCrimsonDepths => true,
-				SolarEclipse => true,
-				HardmodeJungleSurface => true,
-				HardmodeJungleSurfaceNight => true,
-				QueenSlime => true,
-				Destroyer => true,
-				PostMechHell => true,
-				HardmodeJungleDepths => true,
-				HardmodeJungleDepthsNight => true,
-				PirateArmy => true,
-				Twins => true,
-				DD2ArmyTier2 => true,
-				SkeletronPrime => true,
-				SolarEclipsePostAllMechs => true,
-				Plantera => true,
-				PostPlanteraDungeon => true,
-				SolarEclipsePostPlantera => true,
-				PumpkinMoon => true,
-				FrostMoon => true,
-				Empress => true,
-				LihzahrdTemple => true,
-				Golem => true,
-				MartianArmy => true,
-				DD2ArmyTier3 => true,
-				DukeFishron => true,
-				Cultist => true,
-				SolarPillar => true,
-				NebulaPillar => true,
-				VortexPillar => true,
-				StardustPillar => true,
-				MoonLord => true,
+				DesertDepths => ZoneHelpers.DepthsDesert(player) && !Main.hardMode,
+				MiniBiomeGranite => player.ZoneGranite && !Main.hardMode,
+				MiniBiomeMarble => player.ZoneMarble && !Main.hardMode,
+				EvilBoss => idsByProgression[EvilBoss].Contains(spawningNPC),
+				MiniBiomeMeteorite => player.ZoneMeteor,
+				GoblinArmy => Main.invasionType == InvasionID.GoblinArmy && Main.invasionProgressNearInvasion && !Main.hardMode,
+				DD2Army => DD2Event.Ongoing && Main.invasionProgressNearInvasion && DD2Event.OngoingDifficulty == 1,
+				SkyBiome => player.ZoneSkyHeight && !Main.hardMode,
+				JungleDepths => ZoneHelpers.DepthsJungle(player) && !Main.hardMode && Main.dayTime,
+				JungleDepthsNight => ZoneHelpers.DepthsJungle(player) && !Main.hardMode && !Main.dayTime,
+				QueenBee => idsByProgression[QueenBee].Contains(spawningNPC),
+				SpiderBiome => idsByProgression[SpiderBiome].Contains(spawningNPC),
+				Skeletron => idsByProgression[Skeletron].Contains(spawningNPC),
+				Dungeon => player.ZoneDungeon && !Main.hardMode,
+				PreHardmodeHell => ZoneHelpers.Underworld(player) && !Main.hardMode,
+				WallOfFlesh => idsByProgression[WallOfFlesh].Contains(spawningNPC),
+				HardmodeSurface => ZoneHelpers.SurfacePurity(player) && Main.hardMode && Main.dayTime,
+				HardmodeMiniBiomeGraveyard => player.ZoneGraveyard && Main.hardMode,
+				HardmodeSurfaceNight => ZoneHelpers.SurfacePurity(player) && Main.hardMode && !Main.dayTime,
+				HardmodeUnderground => ZoneHelpers.NoEvents(player) && player.ZoneDirtLayerHeight && Main.hardMode,
+				HardmodeMushroomBiome => ZoneHelpers.SurfaceMushroom(player) && Main.hardMode,
+				HardmodeSnowSurface => ZoneHelpers.SurfaceSnow(player) && Main.hardMode,
+				HardmodeDesertSurface => ZoneHelpers.SurfaceDesert(player) && Main.hardMode,
+				HallowSurface => ZoneHelpers.SurfaceHallow(player) && Main.hardMode && Main.dayTime,
+				HallowSurfaceNight => ZoneHelpers.SurfaceHallow(player) && Main.hardMode && !Main.dayTime,
+				HardmodeCaverns => ZoneHelpers.NoEvents(player) && player.ZoneRockLayerHeight && Main.hardMode,
+				HardmodeMiniBiomeMarble => player.ZoneMarble && Main.hardMode,
+				HardmodeSkyBiome => player.ZoneSkyHeight && Main.hardMode,
+				HardmodeSnowDepths => ZoneHelpers.DepthsSnow(player) && Main.hardMode,
+				HardmodeCorruption => ZoneHelpers.SurfaceCorruption(player) && Main.hardMode,
+				HardmodeCrimson => ZoneHelpers.SurfaceCrimson(player) && Main.hardMode,
+				HallowDepths => ZoneHelpers.DepthsHallow(player) && Main.hardMode,
+				GoblinArmyHardmode => Main.invasionType == InvasionID.GoblinArmy && Main.invasionProgressNearInvasion && Main.hardMode,
+				HardmodeSpiderBiome => idsByProgression[HardmodeSpiderBiome].Contains(spawningNPC),
+				HardmodeDesertDepths => ZoneHelpers.DepthsDesert(player) && Main.hardMode,
+				BloodMoonHardmode => ZoneHelpers.SurfaceOrSky(player) && Main.bloodMoon && Main.hardMode,
+				HardmodeHell => ZoneHelpers.Underworld(player) && Main.hardMode,
+				SnowmanArmy => Main.invasionType == InvasionID.SnowLegion && Main.invasionProgressNearInvasion,
+				HardmodeRainEvent => ZoneHelpers.SurfaceOrSky(player) && Main.IsItRaining && Main.hardMode,
+				HardmodeSandstormEvent => Sandstorm.Happening && ZoneHelpers.SurfaceDesert(player) && Main.hardMode,
+				HardmodeCorruptionDepths => ZoneHelpers.DepthsCorruption(player) && Main.hardMode,
+				HardmodeCrimsonDepths => ZoneHelpers.DepthsCrimson(player) && Main.hardMode,
+				SolarEclipse => ZoneHelpers.SurfaceOrSky(player) && Main.eclipse && !NPC.downedMechBossAny && !NPC.downedPlantBoss,
+				HardmodeJungleSurface => ZoneHelpers.SurfaceJungle(player) && Main.hardMode && Main.dayTime,
+				HardmodeJungleSurfaceNight => ZoneHelpers.SurfaceJungle(player) && Main.hardMode && !Main.dayTime,
+				QueenSlime => idsByProgression[QueenSlime].Contains(spawningNPC),
+				Destroyer => idsByProgression[Destroyer].Contains(spawningNPC),
+				PostMechHell => ZoneHelpers.Underworld(player) && Main.hardMode && NPC.downedMechBossAny,
+				HardmodeJungleDepths => ZoneHelpers.DepthsJungle(player) && Main.hardMode && Main.dayTime,
+				HardmodeJungleDepthsNight => ZoneHelpers.DepthsJungle(player) && Main.hardMode && !Main.dayTime,
+				PirateArmy => Main.invasionType == InvasionID.PirateInvasion && Main.invasionProgressNearInvasion,
+				Twins => idsByProgression[Twins].Contains(spawningNPC),
+				DD2ArmyTier2 => DD2Event.Ongoing && DD2Event.OngoingDifficulty == 2,
+				SkeletronPrime => idsByProgression[SkeletronPrime].Contains(spawningNPC),
+				SolarEclipsePostAllMechs => ZoneHelpers.SurfaceOrSky(player) && Main.eclipse && NPC.downedMechBoss1 && NPC.downedMechBoss2 && NPC.downedMechBoss3 && !NPC.downedPlantBoss,
+				Plantera => idsByProgression[Plantera].Contains(spawningNPC),
+				PostPlanteraDungeon => player.ZoneDungeon && NPC.downedPlantBoss,
+				SolarEclipsePostPlantera => ZoneHelpers.SurfaceOrSky(player) && Main.eclipse && NPC.downedPlantBoss,
+				PumpkinMoon => ZoneHelpers.SurfaceOrSky(player) && Main.pumpkinMoon,
+				FrostMoon => ZoneHelpers.SurfaceOrSky(player) && Main.snowMoon,
+				Empress => idsByProgression[Empress].Contains(spawningNPC),
+				LihzahrdTemple => player.ZoneLihzhardTemple,
+				Golem => idsByProgression[Golem].Contains(spawningNPC),
+				MartianArmy => Main.invasionType == InvasionID.MartianMadness && Main.invasionProgressNearInvasion,
+				DD2ArmyTier3 => DD2Event.Ongoing && DD2Event.OngoingDifficulty == 3,
+				DukeFishron => idsByProgression[DukeFishron].Contains(spawningNPC),
+				Cultist => idsByProgression[Cultist].Contains(spawningNPC),
+				SolarPillar => player.ZoneTowerSolar,
+				NebulaPillar => player.ZoneTowerNebula,
+				VortexPillar => player.ZoneTowerVortex,
+				StardustPillar => player.ZoneTowerStardust,
+				MoonLord => idsByProgression[MoonLord].Contains(spawningNPC),
 				_ => throw new Exception("Unknown progression enum value: " + progression)
 			};
+		}
 
 		private static void InitializeRegistry(){
 			//Create a registry of NPC ids based on where they're expected to appear during progression
@@ -726,6 +732,9 @@ namespace AARPG.API.Sorting{
 			};
 			idsByProgression[HardmodeCaverns].AddRange(CreateNetIDsFromBaseTypes(NPCID.ArmoredSkeleton));
 			idsByProgression[HardmodeCaverns].AddRange(idsByProgression[PreHardmodeCaverns]);
+
+			idsByProgression[HardmodeMiniBiomeGranite] = new();
+			idsByProgression[HardmodeMiniBiomeGranite].AddRange(idsByProgression[MiniBiomeGranite]);
 
 			idsByProgression[HardmodeMiniBiomeMarble] = new(){
 				NPCID.Medusa

@@ -1,4 +1,5 @@
-﻿using AARPG.Core.Mechanics;
+﻿using AARPG.API.Sorting;
+using AARPG.Core.Mechanics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +17,7 @@ namespace AARPG.Core.Systems{
 
 			public NPCStatistics stats;
 
-			public Func<bool> requirement;
+			public Func<short, bool> requirement;
 
 			public readonly int sourceID;
 			public readonly float tableWeight;
@@ -49,19 +50,9 @@ namespace AARPG.Core.Systems{
 		internal static void Load(){
 			registry = new();
 
-			conditions = new(){
-				["post-eye"] = Conditions.PostBoss1,
-				["post-evil"] = Conditions.PostBoss2,
-				["post-skel"] = Conditions.PostBoss3,
-				["pre-wof"] = Conditions.PreHardmode,
-				["post-wof"] = Conditions.Hardmode,
-				["post-mech"] = Conditions.PostMech,
-				["post-plant"] = Conditions.PostPlant,
-				["post-golem"] = Conditions.PostGolem,
-				["post-cultist"] = Conditions.PostCultist,
-				["post-moonlord"] = Conditions.PostMoonLord,
-				["anytownies"] = Conditions.AnyTownNPCActive
-			};
+			conditions = new(NPCProgressionRegistry.idsByProgression.Keys
+				.Select(p => new KeyValuePair<string, Func<short, bool>>("Progression-" + Enum.GetName(p),
+					npc => NPCProgressionRegistry.CanUseEntriesAtProgressionStage(p, npc, Main.gameMenu ? null : Main.LocalPlayer))));
 		}
 
 		internal static void PostSetupContent(){
@@ -80,7 +71,7 @@ namespace AARPG.Core.Systems{
 			if(!registry.TryGetValue(type, out var list))
 				return null;
 
-			var validEntries = list.Where(e => e.requirement?.Invoke() ?? true).ToList();
+			var validEntries = list.Where(e => e.requirement?.Invoke((short)type) ?? true).ToList();
 			if(validEntries.Count == 0)
 				return null;
 
@@ -94,7 +85,7 @@ namespace AARPG.Core.Systems{
 		public static bool HasStats(int type)
 			=> registry.ContainsKey(type);
 
-		public static void CreateEntry(int type, string namePrefix, float weight, NPCStatistics stats, Func<bool> requirement = null){
+		public static void CreateEntry(int type, string namePrefix, float weight, NPCStatistics stats, Func<short, bool> requirement = null){
 			if(namePrefix == "null")
 				namePrefix = null;
 

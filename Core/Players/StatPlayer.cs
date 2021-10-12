@@ -60,7 +60,7 @@ namespace AARPG.Core.Players{
 		}
 
 		private void OnKillNPC(NPC npc){
-			if(npc.TryGetGlobalNPC<StatNPC>(out var statNPC) && statNPC.stats is not null)
+			if(npc.TryGetGlobalNPC<StatNPC>(out var statNPC) && statNPC.stats is not null && !npc.SpawnedFromStatue)
 				stats.UpdateXP(Player, statNPC.stats.xp);
 		}
 	}

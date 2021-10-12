@@ -106,8 +106,8 @@ namespace AARPG.Core.UI.NPCStats{
 			//Add toggles for the default conditions
 			foreach(var key in NPCStatisticsRegistry.conditions.Keys){
 				//If the name is too long, ignore it and log the problem to the log file
-				if(key.Length > 20){
-					CoreMod.Instance.Logger.Warn($"NPC Statistics Condition \"{key}\" had a name which exceeded 20 characters");
+				if(key.Length > 35){
+					CoreMod.Instance.Logger.Warn($"NPC Statistics Condition \"{key}\" had a name which exceeded 35 characters");
 					continue;
 				}
 

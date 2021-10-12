@@ -42,9 +42,8 @@ namespace AARPG.Core.Mechanics{
 			xpRequirementsPerLevel = new int[MaxLevel + 1];
 
 			for(int i = 1; i < MaxLevel + 1; i++){
-				//Log is stronger at low values of "i" and Pow is stronger at high values of "i"
 				double lowLvlGrowth = Math.Log(i, 1.05);
-				double highLvlGrowth = 13 * Math.Pow(i, 1.37);
+				double highLvlGrowth = 8 * i * i + 5.25 * i + 5;
 
 				xpRequirementsPerLevel[i - 1] = (int)(lowLvlGrowth + highLvlGrowth);
 			}

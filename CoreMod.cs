@@ -64,9 +64,9 @@ namespace AARPG{
 
 			switch(function){
 				case "Register NPC Stats Condition":
-					CheckArgsLength(3, "string accessKey, Func<bool> condition");
+					CheckArgsLength(3, "string accessKey, Func<short, bool> condition");
 					CheckArg(1, out string key);
-					CheckArg(2, out Func<bool> condition);
+					CheckArg(2, out Func<short, bool> condition);
 
 					if(NPCStatisticsRegistry.conditions.ContainsKey(key))
 						throw new ArgumentException($"NPC Statistics Registry already has an entry for \"{key}\"");
