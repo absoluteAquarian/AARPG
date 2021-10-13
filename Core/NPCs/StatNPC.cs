@@ -1,6 +1,8 @@
 ﻿using AARPG.API.Sorting;
 using AARPG.Core.Mechanics;
+using AARPG.Core.Players;
 using AARPG.Core.Systems;
+using Microsoft.Xna.Framework;
 using System;
 using Terraria;
 using Terraria.ModLoader;
@@ -98,5 +100,68 @@ namespace AARPG.Core.NPCs{
 
 		private void ApplyEndurance(ref int damage)
 			=> damage = Math.Max(1, (int)(damage * (1f - Math.Min(0.9999f, endurance))));
+
+		public override void HitEffect(NPC npc, int hitDirection, double damage){
+			if(npc.life <= 0){
+				for(int i = 0; i < Main.maxPlayers; i++){
+					Player player = Main.player[i];
+
+					if(!player.active || player.dead || !npc.playerInteraction[i])
+						continue;
+
+					StatPlayer statPlayer = player.GetModPlayer<StatPlayer>();
+
+					if(npc.TryGetGlobalNPC<StatNPC>(out var statNPC) && statNPC.stats is not null && !npc.SpawnedFromStatue){
+						bool hasCount = statPlayer.downedCountsByID.TryGetValue((short)npc.netID, out int count);
+						//Killing more of the same boss gives the player less and less XP
+						int xp = statNPC.stats.xp;
+						if(hasCount)
+							xp = (int)(xp * 1f / count);
+
+						//Spawn the experience
+						while(xp > 0){
+							int toSpawn;
+							if(xp >= 10000){
+								toSpawn = 10000;
+								xp -= 10000;
+							}else if(xp >= 5000){
+								toSpawn = 5000;
+								xp -= 5000;
+							}else if(xp >= 1000){
+								toSpawn = 1000;
+								xp -= 1000;
+							}else if(xp >= 500){
+								toSpawn = 500;
+								xp -= 500;
+							}else if(xp >= 100){
+								toSpawn = 100;
+								xp -= 100;
+							}else if(xp >= 50){
+								toSpawn = 50;
+								xp -= 50;
+							}else if(xp >= 10){
+								toSpawn = 10;
+								xp -= 10;
+							}else if(xp >= 5){
+								toSpawn = 5;
+								xp -= 5;
+							}else{
+								toSpawn = 1;
+								xp--;
+							}
+
+							ExperienceTracker.SpawnExperience(toSpawn, npc.Center, Vector2.UnitX.RotatedByRandom(MathHelper.Pi) * 6f, player.whoAmI);
+						}
+
+						if(npc.boss){
+							if(!hasCount)
+								statPlayer.downedCountsByID.Add((short)npc.netID, 0);
+
+							statPlayer.downedCountsByID[(short)npc.netID]++;
+						}
+					}
+				}
+			}
+		}
 	}
 }

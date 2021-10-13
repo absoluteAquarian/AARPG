@@ -1,3 +1,4 @@
+using AARPG.API.GraphicsLib;
 using AARPG.API.Edits;
 using AARPG.API.Sorting;
 using AARPG.Core.Mechanics;
@@ -23,6 +24,8 @@ namespace AARPG{
 			NPCStatisticsRegistry.Load();
 
 			InterfaceSystem.LoadStatic();
+
+			PrimitiveDrawing.Init(Main.graphics.GraphicsDevice);
 		}
 
 		public override void PostSetupContent(){

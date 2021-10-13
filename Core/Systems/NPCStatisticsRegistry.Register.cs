@@ -23,7 +23,7 @@ namespace AARPG.Core.Systems{
 		}
 
 		private static void RegisterEntries(){
-			CreateProgressionJSONs();
+			//CreateProgressionJSONs();
 
 			using Stream pathsStream = CoreMod.Instance.GetFileStream("Data/paths.txt");
 			using StreamReader pathsReader = new StreamReader(pathsStream);
@@ -153,23 +153,173 @@ disposeStreams:
 		}
 
 		private static NPCStatistics GenerateStats(int type, SortingProgression progression){
-			
+			var stats = GenerateBossStats(type);
+			if(stats is not null)
+				return stats;
+
+			// TODO: generate dictionary containing the base "levels" per progression entry
+			return null;
 		}
 
-		private static NPCStatistics GenerateBossStats(int type){
-			NPC npc = new NPC();
-			npc.SetDefaults(type);
-
-			//Modded bosses should have their entries be set manually
-			if(!npc.boss || type >= NPCID.Count)
-				return null;
-
-			return type switch{
+		private static NPCStatistics GenerateBossStats(int type)
+			=> type switch{
 				NPCID.KingSlime => new(){
 					level = 10,
-					xp = 
-				}
+					xp = 500
+				},
+				NPCID.EyeofCthulhu => new(){
+					level = 12,
+					xp = 650
+				},
+				NPCID.EaterofWorldsHead => new(){
+					level = 18,
+					xp = 1200
+				},
+				NPCID.BrainofCthulhu => new(){
+					level = 18,
+					xp = 1200
+				},
+				NPCID.DD2DarkMageT1 => new(){
+					level = 15,
+					xp = 900
+				},
+				NPCID.QueenBee => new(){
+					level = 25,
+					xp = 3500
+				},
+				NPCID.SkeletronHead => new(){
+					level = 30,
+					xp = 4550
+				},
+				NPCID.WallofFlesh => new(){
+					level = 35,
+					xp = 2000
+				},
+				NPCID.WallofFleshEye => new(){
+					level = 35,
+					xp = 2000
+				},
+				NPCID.GoblinSummoner => new(){
+					level = 40,
+					xp = 3500
+				},
+				NPCID.BloodNautilus => new(){
+					level = 38,
+					xp = 2750
+				},
+				NPCID.QueenSlimeBoss => new(){
+					level = 45,
+					xp = 6000
+				},
+				NPCID.TheDestroyer => new(){
+					level = 55,
+					xp = 8000
+				},
+				NPCID.PirateCaptain => new(){
+					level = 51,
+					xp = 2500
+				},
+				NPCID.PirateShip => new(){
+					level = 53,
+					xp = 6000,
+				},
+				NPCID.DD2OgreT2 => new(){
+					level = 60,
+					xp = 9000
+				},
+				NPCID.Spazmatism => new(){
+					level = 55,
+					xp = 4000
+				},
+				NPCID.Retinazer => new(){
+					level = 55,
+					xp = 4000
+				},
+				NPCID.SkeletronPrime => new(){
+					level = 55,
+					xp = 8000
+				},
+				NPCID.Plantera => new(){
+					level = 75,
+					xp = 12000
+				},
+				NPCID.Mothron => new(){
+					level = 77,
+					xp = 12500
+				},
+				NPCID.MourningWood => new(){
+					level = 80,
+					xp = 15750
+				},
+				NPCID.Pumpking => new(){
+					level = 82,
+					xp = 17500
+				},
+				NPCID.Everscream => new(){
+					level = 80,
+					xp = 15750
+				},
+				NPCID.SantaNK1 => new(){
+					level = 81,
+					xp = 16000
+				},
+				NPCID.IceQueen => new(){
+					level = 82,
+					xp = 17500
+				},
+				NPCID.HallowBoss => new(){
+					level = 86,
+					xp = 20000
+				},
+				NPCID.Golem => new(){
+					level = 89,
+					xp = 22750
+				},
+				NPCID.MartianSaucerCore => new(){
+					level = 85,
+					xp = 19000
+				},
+				NPCID.DD2DarkMageT3 => new(){
+					level = 82,
+					xp = 14000
+				},
+				NPCID.DD2OgreT3 => new(){
+					level = 83,
+					xp = 15000
+				},
+				NPCID.DD2Betsy => new(){
+					level = 90,
+					xp = 23000
+				},
+				NPCID.DukeFishron => new(){
+					level = 90,
+					xp = 25000
+				},
+				NPCID.CultistBoss => new(){
+					level = 95,
+					xp = 30000
+				},
+				NPCID.LunarTowerSolar => new(){
+					level = 97,
+					xp = 8000
+				},
+				NPCID.LunarTowerNebula => new(){
+					level = 97,
+					xp = 8000
+				},
+				NPCID.LunarTowerStardust => new(){
+					level = 97,
+					xp = 8000
+				},
+				NPCID.LunarTowerVortex => new(){
+					level = 97,
+					xp = 8000
+				},
+				NPCID.MoonLordCore => new(){
+					level = 100,
+					xp = 40000
+				},
+				_ => null
 			};
-		}
 	}
 }

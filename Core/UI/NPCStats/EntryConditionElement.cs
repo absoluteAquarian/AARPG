@@ -14,7 +14,7 @@ namespace AARPG.Core.UI.NPCStats{
 		public readonly string conditionName;
 
 		public EntryConditionElement(string conditionName){
-			if(conditionName.Length > 20)
+			if(conditionName.Length > 35)
 				throw new ArgumentException($"Condition name \"{conditionName}\" was too long");
 
 			this.conditionName = conditionName;

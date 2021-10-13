@@ -51,7 +51,7 @@ namespace AARPG.Core.Systems{
 			registry = new();
 
 			conditions = new(NPCProgressionRegistry.idsByProgression.Keys
-				.Select(p => new KeyValuePair<string, Func<short, bool>>("Progression-" + Enum.GetName(p),
+				.Select(p => new KeyValuePair<string, Func<short, bool>>(Enum.GetName(p),
 					npc => NPCProgressionRegistry.CanUseEntriesAtProgressionStage(p, npc, Main.gameMenu ? null : Main.LocalPlayer))));
 		}
 
