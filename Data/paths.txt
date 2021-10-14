@@ -19,8 +19,10 @@ Vanilla/TheDestroyer.json
 Vanilla/PirateCaptain.json
 Vanilla/QueenBee.json
 Vanilla/Golem.json
+Vanilla/GolemHead.json
 Vanilla/GolemFistLeft.json
 Vanilla/GolemFistRight.json
+Vanilla/GolemHeadFree.json
 Vanilla/Plantera.json
 Vanilla/BrainofCthulhu.json
 Vanilla/MourningWood.json
@@ -29,10 +31,14 @@ Vanilla/Everscream.json
 Vanilla/IceQueen.json
 Vanilla/SantaNK1.json
 Vanilla/DukeFishron.json
+Vanilla/MartianSaucer.json
 Vanilla/MartianSaucerTurret.json
 Vanilla/MartianSaucerCannon.json
 Vanilla/MartianSaucerCore.json
+Vanilla/MoonLordHead.json
+Vanilla/MoonLordHand.json
 Vanilla/MoonLordCore.json
+Vanilla/MoonLordFreeEye.json
 Vanilla/LunarTowerVortex.json
 Vanilla/CultistBoss.json
 Vanilla/GoblinSummoner.json

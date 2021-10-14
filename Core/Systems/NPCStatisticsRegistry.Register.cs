@@ -190,7 +190,7 @@ disposeStreams:
 		private static NPCStatistics GenerateStats(int type, SortingProgression progression){
 			var stats = GenerateBossStats(type);
 			if(stats is not null){
-				CoreMod.Instance.Logger.Debug($"Generated stats for vanilla boss \"{Lang.GetNPCNameValue(type)}\"");
+				CoreMod.Instance.Logger.Debug($"Generated stats for vanilla NPC \"{Lang.GetNPCNameValue(type)}\"");
 
 				return stats;
 			}
