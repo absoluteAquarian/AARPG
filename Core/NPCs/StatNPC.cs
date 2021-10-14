@@ -107,21 +107,21 @@ namespace AARPG.Core.NPCs{
 			=> damage = Math.Max(1, (int)(damage * (1f - Math.Min(0.9999f, endurance))));
 
 		public override void OnKill(NPC npc){
-			for(int i = 0; i < Main.maxPlayers; i++){
-				Player player = Main.player[i];
+			if(npc.TryGetGlobalNPC<StatNPC>(out var statNPC) && statNPC.stats is not null && !npc.SpawnedFromStatue){
+				for(int i = 0; i < Main.maxPlayers; i++){
+					Player player = Main.player[i];
 
-				if(!player.active || player.dead || !npc.playerInteraction[i])
-					continue;
+					if(!player.active || player.dead || !npc.playerInteraction[i])
+						continue;
 
-				StatPlayer statPlayer = player.GetModPlayer<StatPlayer>();
-
-				if(npc.TryGetGlobalNPC<StatNPC>(out var statNPC) && statNPC.stats is not null && !npc.SpawnedFromStatue){
+					StatPlayer statPlayer = player.GetModPlayer<StatPlayer>();
 					int count = 1;
+
 					bool hasCount = npc.boss && statPlayer.downedCountsByID.TryGetValue((short)npc.netID, out count);
 					//Killing more of the same boss gives the player less and less XP
 					int xp = statNPC.stats.xp;
 					if(hasCount)
-						xp = (int)(xp * 1f / count);
+						xp = (int)(xp * 1f / (count + 1));
 
 					//Spawn the experience
 					if(Main.netMode == NetmodeID.SinglePlayer)

@@ -22,6 +22,8 @@ namespace AARPG.API.Commands{
 			StatPlayer plr = caller.Player.GetModPlayer<StatPlayer>();
 
 			plr.downedCountsByID.Clear();
+
+			caller.Reply("Boss XP penalties cleared!", Color.Green);
 		}
 	}
 }
