@@ -84,7 +84,7 @@ namespace AARPG.Core.Systems{
 
 					CreateEntry(id, entry.NamePrefix, entry.Weight, entry.Stats, requirement);
 
-					CoreMod.Instance.Logger.Debug($"Added statistics entry for NPC \"{Lang.GetNPCNameValue(id)}\", Prefix: {entry.NamePrefix ?? "none"}");
+					//CoreMod.Instance.Logger.Debug($"Added statistics entry for NPC \"{Lang.GetNPCNameValue(id)}\", Prefix: {entry.NamePrefix ?? "none"}");
 				}
 
 disposeStreams:

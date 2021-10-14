@@ -107,9 +107,6 @@ namespace AARPG.Core.Systems{
 			if(!registry.TryGetValue(type, out var list))
 				registry.Add(type, list = new List<Entry>());
 
-			if(list.Any(e => e.namePrefix == namePrefix))
-				throw new ArgumentException($"{(namePrefix is null ? "A default entry" : $"An entry named \"{namePrefix}\"")} has already been registered for the NPC \"{Lang.GetNPCNameValue(type)}\"");
-
 			var entry = new Entry(type, namePrefix, weight, stats){
 				requirement = requirement
 			};
