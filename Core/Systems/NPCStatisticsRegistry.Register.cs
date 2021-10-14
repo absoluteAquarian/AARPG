@@ -357,6 +357,10 @@ disposeStreams:
 					level = 89,
 					xp = 0
 				},
+				NPCID.GolemHeadFree => new(){
+					level = 89,
+					xp = 0
+				},
 				NPCID.MartianSaucerCore => new(){
 					level = 85,
 					xp = 19000
@@ -418,6 +422,10 @@ disposeStreams:
 					xp = 0
 				},
 				NPCID.MoonLordHand => new(){
+					level = 100,
+					xp = 0
+				},
+				NPCID.MoonLordFreeEye => new(){
 					level = 100,
 					xp = 0
 				},

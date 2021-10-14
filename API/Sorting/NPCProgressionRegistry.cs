@@ -511,7 +511,8 @@ namespace AARPG.API.Sorting{
 			};
 
 			idsByProgression[CthulhuEye] = new(){
-				NPCID.EyeofCthulhu
+				NPCID.EyeofCthulhu,
+				NPCID.ServantofCthulhu
 			};
 
 			idsByProgression[BloodMoon] = new(){
@@ -1076,13 +1077,16 @@ namespace AARPG.API.Sorting{
 			idsByProgression[Golem] = new(){
 				NPCID.Golem,
 				NPCID.GolemFistLeft,
-				NPCID.GolemFistRight
+				NPCID.GolemFistRight,
+				NPCID.GolemHead,
+				NPCID.GolemHeadFree
 			};
 
 			idsByProgression[MartianArmy] = new(){
 				NPCID.MartianSaucerCannon,
 				NPCID.MartianSaucerTurret,
 				NPCID.MartianSaucerCore,
+				NPCID.MartianSaucer,
 				NPCID.Scutlix,
 				NPCID.ScutlixRider,
 				NPCID.MartianWalker,
@@ -1164,7 +1168,10 @@ namespace AARPG.API.Sorting{
 
 			idsByProgression[MoonLord] = new(){
 				NPCID.MoonLordCore,
-				NPCID.MoonLordLeechBlob
+				NPCID.MoonLordLeechBlob,
+				NPCID.MoonLordHead,
+				NPCID.MoonLordHand,
+				NPCID.MoonLordFreeEye
 			};
 		}
 
