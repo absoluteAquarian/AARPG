@@ -27,6 +27,7 @@ namespace AARPG.Core.JSON{
 			writer.WritePropertyName("mult");
 			writer.WriteValue(obj.mult);
 			writer.WritePropertyName("flat");
+			writer.WriteValue(obj.flat);
 			writer.WriteEndObject();
 		}
 

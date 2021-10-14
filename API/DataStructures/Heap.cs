@@ -7,6 +7,16 @@ namespace AARPG.API.DataStructures{
 	/// An object representing a heap of objects
 	/// </summary>
 	public class Heap<T> : IDisposable, IEnumerable, IEnumerable<T>{
+		public struct HeapIndex{
+			public readonly int index;
+			public readonly int length;
+
+			internal HeapIndex(int index, int length){
+				this.index = index;
+				this.length = length;
+			}
+		}
+
 		private T[] heap;
 		//Having "free entry" be "false" and "used entry" be "true" simplifies the logic when growing the heap, since BitArray defaults new bits to "false"
 		//BitArray also handles determining how many bits are needed for a given capacity
@@ -53,55 +63,54 @@ namespace AARPG.API.DataStructures{
 		/// Inserts <paramref name="entries"/> into the heap and expands the heap if there isn't enough space
 		/// </summary>
 		/// <returns>The starting index of <paramref name="entries"/> in the heap, or <c>-1</c> if the array was empty</returns>
-		public int AllocateEntries(T[] entries){
+		public HeapIndex AllocateEntries(T[] entries){
 			if(entries is null)
 				throw new ArgumentNullException(nameof(entries));
 
 			if(entries.Length == 0)
-				return -1;
+				return new HeapIndex(-1, 0);
 
 			Count += entries.Length;
 
 			if(FindFreeRange(entries.Length, out int start)){
 				//Insert the entries at the given index
 				InsertEntries(entries, start);
-				return start;
+				return new HeapIndex(start, entries.Length);
 			}
 
 			//Couldn't find a free range.  Need to allocate more
 			int oldLength = heap.Length;
 			EnsureCapacity(heap.Length + entries.Length);
 			InsertEntries(entries, oldLength);
-			return oldLength;
+			return new HeapIndex(start, entries.Length);
 		}
 
 		/// <summary>
 		/// Gets a slice of entries within the heap
 		/// </summary>
-		/// <param name="start">The starting index of the entries to retrieve</param>
-		/// <param name="length">How many entries to retrieve</param>
+		/// <param name="index">The starting index and amount of the entries to retrieve</param>
 		/// <remarks>This method can return entries which are considered "freed"</remarks>
-		public T[] GetEntries(int start, int length){
-			EnsureWithinRange(start, length);
+		public T[] GetEntries(HeapIndex index){
+			EnsureWithinRange(index.index, index.length);
 
-			if(length == 0)
+			if(index.length == 0)
 				return Array.Empty<T>();
 
-			return heap[start..(start + length)];
+			return heap[index.index..(index.index + index.length)];
 		}
 
-		public void FreeEntries(int start, int length){
-			EnsureWithinRange(start, length);
+		public void FreeEntries(HeapIndex index){
+			EnsureWithinRange(index.index, index.length);
 
 			version++;
 
-			if(length == 0)
+			if(index.length == 0)
 				return;
 
-			Array.Fill(heap, default, start, length);
-			UpdateUsed(start, length, set: false);
+			Array.Fill(heap, default, index.index, index.length);
+			UpdateUsed(index.index, index.length, set: false);
 
-			Count -= length;
+			Count -= index.length;
 		}
 
 		private bool FindFreeRange(int length, out int start){

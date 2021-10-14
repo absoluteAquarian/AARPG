@@ -23,7 +23,10 @@ namespace AARPG.Core.Systems{
 		}
 
 		private static void RegisterEntries(){
-			//CreateProgressionJSONs();
+			string projectFolder = Path.Combine(Platform.Get<IPathService>().GetStoragePath("Terraria"), "ModLoader", "Beta", "Mod Sources", nameof(AARPG), "Data");
+			CreateProgressionJSONs(projectFolder);
+
+			CoreMod.Instance.Logger.Debug("Loading internally stored JSONs...");
 
 			using Stream pathsStream = CoreMod.Instance.GetFileStream("Data/paths.txt");
 			using StreamReader pathsReader = new StreamReader(pathsStream);
@@ -76,22 +79,12 @@ namespace AARPG.Core.Systems{
 
 				foreach(var entry in database.Database){
 					Func<short, bool> requirement = null;
-					if(entry.RequirementKeys is not null){
-						string[] keys = entry.RequirementKeys.Split(';');
-					
-						//Remove the trailing "," on the last one if it's there
-						if(keys[^1].EndsWith(','))
-							keys[^1] = keys[^1][..^1];
-
-						foreach(var key in keys)
-							AddRequirement(ref requirement, conditions.TryGetValue(key, out var condition)
-								? condition
-								: throw new ArgumentException($"Unknown condition requested: {key}"));
-					}
+					if(entry.RequirementKeys is not null)
+						requirement = CreateProgressionFunction(entry.RequirementKeys);
 
 					CreateEntry(id, entry.NamePrefix, entry.Weight, entry.Stats, requirement);
 
-					CoreMod.Instance.Logger.Debug($"Added entry for NPC \"{Lang.GetNPCNameValue(id)}\", Name: {entry.NamePrefix ?? "null"}");
+					CoreMod.Instance.Logger.Debug($"Added statistics entry for NPC \"{Lang.GetNPCNameValue(id)}\", Prefix: {entry.NamePrefix ?? "none"}");
 				}
 
 disposeStreams:
@@ -117,47 +110,92 @@ disposeStreams:
 			});
 		}
 
-		private static void CreateProgressionJSONs(){
+		private static void CreateProgressionJSONs(string projectFolder){
 			//If the Mod Sources path exists, update the directory for the jsons
-			string folder = Path.Combine(Platform.Get<IPathService>().GetStoragePath("ModLoader"), "Beta", "Mod Sources", nameof(AARPG), "Data");
-			if(!Directory.Exists(folder))
-				return;
+			if(!Directory.Exists(projectFolder) || CoreMod.Release){
+				if(!CoreMod.Release)
+					CoreMod.Instance.Logger.Debug("AARPG project directory not found: " + projectFolder);
 
-			ModNPC m;
+				return;
+			}
+
+			CoreMod.Instance.Logger.Debug("AARPG project directory found.  Attempting to update Data folder...");
+
+			string pathsFile = Path.Combine(projectFolder, "paths.txt");
+			List<string> files = new();
+			bool entryWasCreated = false;
+
+			ModNPC m = null;
 			var progressionDict = NPCProgressionRegistry.idsToProgressions;
-			foreach(string file in File.ReadAllLines(Path.Combine(folder, "paths.txt"))
+			foreach(string file in File.ReadAllLines(pathsFile)
 				.Concat(NPCProgressionRegistry.idsToProgressions.Keys.Select(k => k < NPCID.Count
 					? "Vanilla/" + NPCID.Search.GetName(k)
 					: (m = NPCLoader.GetNPC(k)).Mod.Name + "/" + m.FullName[(m.FullName.IndexOf('.') + 1)..]))){
 				NPCStatisticsDatabaseJSON json;
-				string fullPath = Path.Combine(folder, file) + ".json";
+				int id = -1;
+
+				string fullPath = Path.Combine(projectFolder, file) + ".json";
 				string modName = Path.GetDirectoryName(file);
 				string npcName = Path.GetFileName(file);
+
+				bool isVanillaID = modName == "Vanilla" && NPCID.Search.TryGetId(npcName, out id);
+				bool isModdedID = !isVanillaID && ModContent.TryFind(file.Replace('/', '.'), out m);
+				if(isModdedID)
+					id = (short)m.Type;
 
 				if(File.Exists(fullPath)){
 					json = JsonConvert.DeserializeObject<NPCStatisticsDatabaseJSON>(File.ReadAllText(fullPath), new JsonSerializerSettings(){
 						MissingMemberHandling = MissingMemberHandling.Ignore,
 						DefaultValueHandling = DefaultValueHandling.Populate
 					});
-				}else if((modName == "Vanilla" && NPCID.Search.TryGetId(npcName, out int id) && progressionDict.TryGetValue((short)id, out var progressions)) || (ModContent.TryFind(file.Replace('/', '.'), out m) && progressionDict.TryGetValue((short)(id = m.Type), out progressions))){
+
+					files.Add(file + ".json");
+				}else if((isVanillaID || isModdedID) && progressionDict.TryGetValue((short)id, out var progressions)){
+					NPCStatistics stats = null;
 					json = new(){
-						Database = progressions.Select(p => new NPCStatisticsDatabaseEntryJSON(){
-							NamePrefix = null,
-							Weight = 1f,
-							Stats = GenerateStats(id, p),
-							RequirementKeys = Enum.GetName(p)
-						}).ToList()
+						Database = progressions
+							.Select(p => (stats = GenerateStats(id, p)) is null ? null : new NPCStatisticsDatabaseEntryJSON(){
+								NamePrefix = null,
+								Weight = 1f,
+								Stats = stats,
+								RequirementKeys = Enum.GetName(p)
+							})
+							.Where(j => j is not null)
+							.ToList()
 					};
+
+					if(json.Database.Count > 0){
+						//Create the file in the project
+						using(StreamWriter writer = new StreamWriter(File.Open(fullPath, FileMode.CreateNew)))
+							writer.Write(JsonConvert.SerializeObject(json, Formatting.Indented, new JsonSerializerSettings(){
+								MissingMemberHandling = MissingMemberHandling.Ignore,
+								DefaultValueHandling = DefaultValueHandling.Populate
+							}));
+
+						files.Add(file + ".json");
+
+						entryWasCreated = true;
+					}
 				}
+			}
+
+			//Update the paths file if any new entries were created
+			if(entryWasCreated){
+				File.WriteAllLines(pathsFile, files);
+
+				CoreMod.Instance.Logger.Warn("New JSON entries have been created.  Re-building the mod will be required!");
 			}
 		}
 
 		private static NPCStatistics GenerateStats(int type, SortingProgression progression){
 			var stats = GenerateBossStats(type);
-			if(stats is not null)
-				return stats;
+			if(stats is not null){
+				CoreMod.Instance.Logger.Debug($"Generated stats for vanilla boss \"{Lang.GetNPCNameValue(type)}\"");
 
-			// TODO: generate dictionary containing the base "levels" per progression entry
+				return stats;
+			}
+
+			// TODO: generate a dictionary containing the base "levels" per progression entry for normal NPCs
 			return null;
 		}
 
@@ -175,6 +213,14 @@ disposeStreams:
 					level = 18,
 					xp = 1200
 				},
+				NPCID.EaterofWorldsBody => new(){
+					level = 18,
+					xp = 0
+				},
+				NPCID.EaterofWorldsTail => new(){
+					level = 18,
+					xp = 0
+				},
 				NPCID.BrainofCthulhu => new(){
 					level = 18,
 					xp = 1200
@@ -190,6 +236,10 @@ disposeStreams:
 				NPCID.SkeletronHead => new(){
 					level = 30,
 					xp = 4550
+				},
+				NPCID.SkeletronHand => new(){
+					level = 30,
+					xp = 0
 				},
 				NPCID.WallofFlesh => new(){
 					level = 35,
@@ -223,6 +273,10 @@ disposeStreams:
 					level = 53,
 					xp = 6000,
 				},
+				NPCID.PirateShipCannon => new(){
+					level = 53,
+					xp = 0,
+				},
 				NPCID.DD2OgreT2 => new(){
 					level = 60,
 					xp = 9000
@@ -238,6 +292,22 @@ disposeStreams:
 				NPCID.SkeletronPrime => new(){
 					level = 55,
 					xp = 8000
+				},
+				NPCID.PrimeCannon => new(){
+					level = 55,
+					xp = 0
+				},
+				NPCID.PrimeLaser => new(){
+					level = 55,
+					xp = 0
+				},
+				NPCID.PrimeSaw => new(){
+					level = 55,
+					xp = 0
+				},
+				NPCID.PrimeVice => new(){
+					level = 55,
+					xp = 0
 				},
 				NPCID.Plantera => new(){
 					level = 75,
@@ -275,9 +345,33 @@ disposeStreams:
 					level = 89,
 					xp = 22750
 				},
+				NPCID.GolemFistLeft => new(){
+					level = 89,
+					xp = 0
+				},
+				NPCID.GolemFistRight => new(){
+					level = 89,
+					xp = 0
+				},
+				NPCID.GolemHead => new(){
+					level = 89,
+					xp = 0
+				},
 				NPCID.MartianSaucerCore => new(){
 					level = 85,
 					xp = 19000
+				},
+				NPCID.MartianSaucerCannon => new(){
+					level = 85,
+					xp = 0
+				},
+				NPCID.MartianSaucerTurret => new(){
+					level = 85,
+					xp = 0
+				},
+				NPCID.MartianSaucer => new(){
+					level = 85,
+					xp = 0
 				},
 				NPCID.DD2DarkMageT3 => new(){
 					level = 82,
@@ -318,6 +412,14 @@ disposeStreams:
 				NPCID.MoonLordCore => new(){
 					level = 100,
 					xp = 40000
+				},
+				NPCID.MoonLordHead => new(){
+					level = 100,
+					xp = 0
+				},
+				NPCID.MoonLordHand => new(){
+					level = 100,
+					xp = 0
 				},
 				_ => null
 			};

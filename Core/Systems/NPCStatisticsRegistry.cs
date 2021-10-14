@@ -51,8 +51,23 @@ namespace AARPG.Core.Systems{
 			registry = new();
 
 			conditions = new(NPCProgressionRegistry.idsByProgression.Keys
-				.Select(p => new KeyValuePair<string, Func<short, bool>>(Enum.GetName(p),
-					npc => NPCProgressionRegistry.CanUseEntriesAtProgressionStage(p, npc, Main.gameMenu ? null : Main.LocalPlayer))));
+				.Select(p => new KeyValuePair<string, Func<short, bool>>(Enum.GetName(p), CreateProgressionFunction(p))));
+		}
+
+		internal static Func<short, bool> CreateProgressionFunction(SortingProgression progression)
+			=> npc => NPCProgressionRegistry.CanUseEntriesAtProgressionStage(progression, npc, Main.gameMenu ? null : Main.LocalPlayer);
+
+		internal static Func<short, bool> CreateProgressionFunction(string jsonProgression){
+			Func<short, bool> ret = null;
+			
+			foreach(var progression in jsonProgression.Split(';')){
+				if(ret is null)
+					ret = conditions[progression];
+				else
+					ret += conditions[progression];
+			}
+
+			return ret;
 		}
 
 		internal static void PostSetupContent(){

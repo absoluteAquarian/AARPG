@@ -32,15 +32,15 @@ namespace AARPG.Core.JSON{
 
 			writer.WriteStartObject();
 			writer.WritePropertyName("hp");
-			writer.WriteValue(stat.healthModifier);
+			serializer.Serialize(writer, stat.healthModifier);
 			writer.WritePropertyName("defense");
-			writer.WriteValue(stat.defenseModifier);
+			serializer.Serialize(writer, stat.defenseModifier);
 			writer.WritePropertyName("endure");
-			writer.WriteValue(stat.enduranceModifier);
+			serializer.Serialize(writer, stat.enduranceModifier);
 			writer.WritePropertyName("scale");
-			writer.WriteValue(stat.scaleModifier);
+			serializer.Serialize(writer, stat.scaleModifier);
 			writer.WritePropertyName("value");
-			writer.WriteValue(stat.valueModifier);
+			serializer.Serialize(writer, stat.valueModifier);
 			writer.WriteEndObject();
 
 			writer.WriteEndObject();

@@ -7,6 +7,8 @@ using AARPG.Core.Utility.Extensions;
 using System;
 using Terraria;
 using Terraria.ModLoader;
+using System.IO;
+using Terraria.ID;
 
 namespace AARPG{
 	public class CoreMod : Mod{
@@ -39,6 +41,9 @@ namespace AARPG{
 
 			NPCProgressionRegistry.Unload();
 		}
+
+		public override void HandlePacket(BinaryReader reader, int whoAmI)
+			=> Networking.HandlePacket(reader, whoAmI);
 
 		public override object Call(params object[] args){
 			if(args is null)

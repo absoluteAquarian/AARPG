@@ -1,0 +1,40 @@
+{
+  "entries": [
+    {
+      "prefix": null,
+      "weight": 1.0,
+      "stats": {
+        "level": 89,
+        "xp": 22750,
+        "mod": {
+          "hp": {
+            "add": 0.0,
+            "mult": 1.0,
+            "flat": 0.0
+          },
+          "defense": {
+            "add": 0.0,
+            "mult": 1.0,
+            "flat": 0.0
+          },
+          "endure": {
+            "add": 0.0,
+            "mult": 1.0,
+            "flat": 0.0
+          },
+          "scale": {
+            "add": 0.0,
+            "mult": 1.0,
+            "flat": 0.0
+          },
+          "value": {
+            "add": 0.0,
+            "mult": 1.0,
+            "flat": 0.0
+          }
+        }
+      },
+      "requirements": "Golem"
+    }
+  ]
+}

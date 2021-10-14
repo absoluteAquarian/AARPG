@@ -4,20 +4,11 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace AARPG.Core.Systems{
 	public class ExperienceTracker : ModSystem{
-		public struct HeapIndex{
-			public readonly int index;
-			public Experience xp;
-
-			internal HeapIndex(int index, Experience xp){
-				this.index = index;
-				this.xp = xp;
-			}
-		}
-
 		private static Heap<Experience> heap;
 
 		public override void OnWorldLoad(){
@@ -40,7 +31,7 @@ namespace AARPG.Core.Systems{
 			}
 
 			foreach(var freed in toFree)
-				heap.FreeEntries(freed, 1);
+				heap.FreeEntries(new(freed, 1));
 		}
 
 		public override void PostDrawTiles(){
@@ -65,13 +56,53 @@ namespace AARPG.Core.Systems{
 				xp.DrawTrail();
 		}
 
-		public static Experience GetHeapElement(HeapIndex index)
-			=> heap[index.index];
+		public static Heap<Experience>.HeapIndex SpawnExperience(int xp, Vector2 location, float velocityLength, int targetPlayer){
+			if(xp <= 0)
+				return new(-1, 0);
 
-		public static HeapIndex SpawnExperience(int xp, Vector2 location, Vector2 velocity, int targetPlayer){
-			Experience thing = new Experience(xp, location, velocity, targetPlayer);
+			List<Experience> spawned = new();
+			int totalLeft = xp;
+			while(totalLeft > 0){
+				int toSpawn;
+				if(totalLeft >= Experience.Sizes.OrbLargeBlue){
+					toSpawn = Experience.Sizes.OrbLargeBlue;
+					totalLeft -= Experience.Sizes.OrbLargeBlue;
+				}else if(totalLeft >= Experience.Sizes.OrbLargeGreen){
+					toSpawn = Experience.Sizes.OrbLargeGreen;
+					totalLeft -= Experience.Sizes.OrbLargeGreen;
+				}else if(totalLeft >= Experience.Sizes.OrbLargeYellow){
+					toSpawn = Experience.Sizes.OrbLargeYellow;
+					totalLeft -= Experience.Sizes.OrbLargeYellow;
+				}else if(totalLeft >= Experience.Sizes.OrbMediumBlue){
+					toSpawn = Experience.Sizes.OrbMediumBlue;
+					totalLeft -= Experience.Sizes.OrbMediumBlue;
+				}else if(totalLeft >= Experience.Sizes.OrbMediumGreen){
+					toSpawn = Experience.Sizes.OrbMediumGreen;
+					totalLeft -= Experience.Sizes.OrbMediumGreen;
+				}else if(totalLeft >= Experience.Sizes.OrbMediumYellow){
+					toSpawn = Experience.Sizes.OrbMediumYellow;
+					totalLeft -= Experience.Sizes.OrbMediumYellow;
+				}else if(totalLeft >= Experience.Sizes.OrbSmallBlue){
+					toSpawn = Experience.Sizes.OrbSmallBlue;
+					totalLeft -= Experience.Sizes.OrbSmallBlue;
+				}else if(totalLeft >= Experience.Sizes.OrbSmallGreen){
+					toSpawn = Experience.Sizes.OrbSmallGreen;
+					totalLeft -= Experience.Sizes.OrbSmallGreen;
+				}else{
+					toSpawn = Experience.Sizes.OrbSmallYellow;
+					totalLeft--;
+				}
 
-			return new HeapIndex(heap.AllocateEntries(new[]{ thing }), thing);
+				Experience thing = new Experience(toSpawn, location, Vector2.UnitX.RotatedByRandom(MathHelper.Pi) * velocityLength, targetPlayer);
+				spawned.Add(thing);
+			}
+
+			var idx = heap.AllocateEntries(spawned.ToArray());
+
+			if(Main.netMode == NetmodeID.MultiplayerClient)
+				Networking.SendSpawnExperienceOrbs(Main.myPlayer, targetPlayer, xp, location, velocityLength);
+
+			return idx;
 		}
 	}
 }
