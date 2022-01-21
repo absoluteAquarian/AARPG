@@ -61,7 +61,7 @@ namespace AARPG.Core.NPCs{
 
 			DelayedStatAssignment = false;
 
-			if(NPCProgressionRegistry.NonSeparableWormNPCToHead.TryGetValue(npc.netID, out int headType)){
+			if(stats is null && NPCProgressionRegistry.NonSeparableWormNPCToHead.TryGetValue(npc.netID, out int headType)){
 				//All vanilla worms set the "head" NPC's whoAmI to npc.ai[3] and npc.realLife
 				if(npc.realLife >= 0 && npc.realLife == npc.ai[3]){
 					NPC headNPC = Main.npc[npc.realLife];
@@ -76,17 +76,23 @@ namespace AARPG.Core.NPCs{
 		}
 
 		private void ApplyStatsAndNamePrefix(NPC npc, int netID){
-			if(stats is not null){
+			if(stats is not null)
 				stats.ApplyTo(npc);
-				
-				string lvl = $"[Lv. {stats.level}]";
+
+			ApplyNamePrefix(npc, netID);
+		}
+
+		internal void ApplyNamePrefix(NPC npc, int netID, bool prependLevel = true){
+			if(stats is not null){
+				string lvl = prependLevel ? $"[Lv. {stats.level}] " : "";
 				string netName = Lang.GetNPCNameValue(netID);
 
 				//Ensure that names like "The Groom" end up as "The Large Groom" instead of "Large The Groom"
+				// TODO: localization support
 				if(netName.StartsWith("The "))
-					npc.GivenName = $"{lvl} The {namePrefix}{netName[4..]}";
+					npc.GivenName = $"{lvl}The {namePrefix}{netName[4..]}";
 				else
-					npc.GivenName = $"{lvl} {namePrefix}{netName}";
+					npc.GivenName = $"{lvl}{namePrefix}{netName}";
 			}
 		}
 
