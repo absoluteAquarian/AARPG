@@ -124,7 +124,8 @@ namespace AARPG.Core.Mechanics{
 			Vector2 direction = player.DirectionFrom(center);
 
 			if(!player.dead && !collected){
-				velocity = velocity.RotateTowards(direction, MathHelper.ToRadians(270) / 60f / (ExtraUpdates + 1));
+				if(velocity != Vector2.Zero)
+					velocity = velocity.RotateTowards(direction, MathHelper.ToRadians(270) / 60f / (ExtraUpdates + 1));
 
 				if(Vector2.DistanceSquared(center, player.Center) >= Vector2.DistanceSquared(center + velocity / (ExtraUpdates + 1), player.Center)){
 					velocity += Vector2.Normalize(velocity) * 5f / 60f / (ExtraUpdates + 1);
@@ -136,7 +137,7 @@ namespace AARPG.Core.Mechanics{
 					velocity *= 1f - 3.57f / 60f / (ExtraUpdates + 1);
 			}else if(player.dead){
 				//Slow down
-				velocity *= 1f - 3.4f / 60f;
+				velocity *= 1f - 0.37f / 60f;
 
 				if(velocity.LengthSquared() < 0.5f * 0.5f)
 					velocity = Vector2.Zero;
