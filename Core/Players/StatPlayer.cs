@@ -99,14 +99,12 @@ namespace AARPG.Core.Players{
 			if(drawInfo.shadow != 0)
 				return;
 
-			Color current = new Color(r, g, b, a);
+			Vector3 current = new Vector3(r, g, b);
 			if(xpCollectFlashTimer >= 0 && xpCollectColor != default){
-				current = Color.Lerp(current, xpCollectColor, xpCollectFlashTimer / (float)XPCollectTimerMax);
-				var vector = current.ToVector4();
-				r = vector.X;
-				g = vector.Y;
-				b = vector.Z;
-				a = vector.W;
+				current = Vector3.Lerp(current, xpCollectColor.ToVector3(), xpCollectFlashTimer / (float)XPCollectTimerMax);
+				r = current.X;
+				g = current.Y;
+				b = current.Z;
 			}
 
 			lastUpdate = (int)Main.GameUpdateCount;

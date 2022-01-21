@@ -97,10 +97,10 @@ namespace AARPG.Core.Mechanics{
 
 			oldCollected = collected;
 
-			//Home in on the player, unless they're dead
+			//Home in on the player, unless they've disconnected
 			Player player = Main.player[target];
 
-			if(!player.active || player.dead)
+			if(!player.active)
 				collected = true;
 
 			if(collected){
@@ -123,16 +123,24 @@ namespace AARPG.Core.Mechanics{
 
 			Vector2 direction = player.DirectionFrom(center);
 
-			velocity = velocity.RotateTowards(direction, MathHelper.ToRadians(270) / 60f / (ExtraUpdates + 1));
+			if(!player.dead && !collected){
+				velocity = velocity.RotateTowards(direction, MathHelper.ToRadians(270) / 60f / (ExtraUpdates + 1));
 
-			if(Vector2.DistanceSquared(center, player.Center) >= Vector2.DistanceSquared(center + velocity / (ExtraUpdates + 1), player.Center)){
-				velocity += Vector2.Normalize(velocity) * 5f / 60f / (ExtraUpdates + 1);
+				if(Vector2.DistanceSquared(center, player.Center) >= Vector2.DistanceSquared(center + velocity / (ExtraUpdates + 1), player.Center)){
+					velocity += Vector2.Normalize(velocity) * 5f / 60f / (ExtraUpdates + 1);
 
-				const float vel = 30 * 16;
-				if(velocity.LengthSquared() > vel * vel)
-					velocity = Vector2.Normalize(velocity) * vel;
-			}else
-				velocity *= 1f - 3.57f / 60f / (ExtraUpdates + 1);
+					const float vel = 30 * 16;
+					if(velocity.LengthSquared() > vel * vel)
+						velocity = Vector2.Normalize(velocity) * vel;
+				}else
+					velocity *= 1f - 3.57f / 60f / (ExtraUpdates + 1);
+			}else if(player.dead){
+				//Slow down
+				velocity *= 1f - 3.4f / 60f;
+
+				if(velocity.LengthSquared() < 0.5f * 0.5f)
+					velocity = Vector2.Zero;
+			}
 
 			if(oldCenters.Count < 30 * (ExtraUpdates + 1))
 				oldCenters.Enqueue(center);
@@ -143,7 +151,7 @@ namespace AARPG.Core.Mechanics{
 
 			center += velocity / (ExtraUpdates + 1);
 
-			if(!collected && player.Hitbox.Contains(center.ToPoint())){
+			if(!collected && !player.dead && player.Hitbox.Contains(center.ToPoint())){
 				var statPlayer = player.GetModPlayer<StatPlayer>();
 
 				statPlayer.stats.UpdateXP(player, value);
@@ -152,6 +160,23 @@ namespace AARPG.Core.Mechanics{
 				statPlayer.xpCollectFlashTimer = StatPlayer.XPCollectTimerMax;
 
 				collected = true;
+			}
+
+			//Draw calls happen less often than Update calls during lag... which causes the arrays to not be the same size
+			//Therefore, the data must be set here instead of in DrawTrail
+			Color color = GetTrailColor();
+			int trailColorCount = oldCenters.Count + 1;
+			Color[] colors = new Color[trailColorCount];
+
+			if(!oldCollected || collectedTrail is null){
+				colors[^1] = color;
+				int i = 0;
+				foreach(var old in oldCenters){
+					colors[i] = Color.Lerp(color, Color.Transparent, 1f - i / (float)trailColorCount);
+					i++;
+				}
+
+				collectedTrail = colors;
 			}
 		}
 
@@ -168,22 +193,23 @@ namespace AARPG.Core.Mechanics{
 				return;
 
 			Color color = GetTrailColor();
-			Color[] colors = new Color[oldCenters.Count + 1];
+			int trailColorCount = oldCenters.Count + 1;
+			Color[] colors = new Color[trailColorCount];
 
-			//If collected, just grab colors from the old array
-			if(!oldCollected || collectedTrail is null || collectedTrail.Length == oldCenters.Count + 1){
+			if(!oldCollected){
+				//Manually set the colours
 				colors[^1] = color;
 				int i = 0;
 				foreach(var old in oldCenters){
-					colors[i] = Color.Lerp(color, Color.Transparent, 1f - i / (float)(oldCenters.Count + 1));
+					colors[i] = Color.Lerp(color, Color.Transparent, 1f - i / (float)trailColorCount);
 					i++;
 				}
+			}else{
+				//If collected, just grab colors from the old array
+				Array.Copy(collectedTrail, collectedTrail.Length - trailColorCount, colors, 0, trailColorCount);
+			}
 
-				collectedTrail = colors;
-			}else
-				Array.Copy(collectedTrail, collectedTrail.Length - oldCenters.Count - 1, colors, 0, oldCenters.Count + 1);
-
-			Vector2[] points = new Vector2[oldCenters.Count + 1];
+			Vector2[] points = new Vector2[trailColorCount];
 			points[^1] = center;
 			oldCenters.CopyTo(points, 0);
 

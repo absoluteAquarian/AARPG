@@ -1,7 +1,7 @@
-﻿using AARPG.API.DataStructures;
-using AARPG.Core.Mechanics;
+﻿using AARPG.Core.Mechanics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
@@ -9,29 +9,15 @@ using Terraria.ModLoader;
 
 namespace AARPG.Core.Systems{
 	public class ExperienceTracker : ModSystem{
-		private static Heap<Experience> heap;
+		private static Experience[] trackedEXP;
 
 		public override void OnWorldLoad(){
-			heap?.Dispose();
-			heap = new(1000);
+			trackedEXP = new Experience[1000];
 		}
 
 		public override void PostUpdateNPCs(){
-			var iter = heap.GetEnumerator();
-
-			List<int> toFree = new();
-
-			while(iter.MoveNext()){
-				var xp = iter.Current as Experience;
-
-				xp.Update();
-				
-				if(!xp.active)
-					toFree.Add((iter as Heap<Experience>.HeapEnumerator).CurrentIndex);
-			}
-
-			foreach(var freed in toFree)
-				heap.FreeEntries(new(freed, 1));
+			for(int i = 0; i < trackedEXP.Length; i++)
+				trackedEXP[i]?.Update();
 		}
 
 		public override void PostDrawTiles(){
@@ -40,7 +26,11 @@ namespace AARPG.Core.Systems{
 
 			//Draw the orbs
 			var texture = CoreMod.Instance.Assets.Request<Texture2D>("Core/Mechanics/Experience").Value;
-			foreach(Experience xp in heap){
+			for(int i = 0; i < trackedEXP.Length; i++){
+				var xp = trackedEXP[i];
+				if(xp is null || !xp.active)
+					continue;
+
 				var size = xp.GetSize();
 				if(size == Vector2.Zero || xp.collected)
 					continue;
@@ -52,13 +42,13 @@ namespace AARPG.Core.Systems{
 			batch.End();
 
 			//Draw the trails
-			foreach(Experience xp in heap)
-				xp.DrawTrail();
+			for(int i = 0; i < trackedEXP.Length; i++)
+				trackedEXP[i]?.DrawTrail();
 		}
 
-		public static Heap<Experience>.HeapIndex SpawnExperience(int xp, Vector2 location, float velocityLength, int targetPlayer){
+		public static int[] SpawnExperience(int xp, Vector2 location, float velocityLength, int targetPlayer){
 			if(xp <= 0)
-				return new(-1, 0);
+				return Array.Empty<int>();
 
 			List<Experience> spawned = new();
 			int totalLeft = xp;
@@ -97,12 +87,31 @@ namespace AARPG.Core.Systems{
 				spawned.Add(thing);
 			}
 
-			var idx = heap.AllocateEntries(spawned.ToArray());
+			int[] indices = new int[spawned.Count];
+			for(int i = 0; i < indices.Length; i++)
+				indices[i] = InsertExperience(spawned[i]);
 
 			if(Main.netMode == NetmodeID.MultiplayerClient)
 				Networking.SendSpawnExperienceOrbs(Main.myPlayer, targetPlayer, xp, location, velocityLength);
 
-			return idx;
+			return indices;
+		}
+
+		private static int InsertExperience(Experience expNew){
+			for(int i = 0; i < trackedEXP.Length; i++){
+				var exp = trackedEXP[i];
+
+				if(exp is null || !exp.active){
+					trackedEXP[i] = expNew;
+					return i;
+				}
+			}
+
+			int index = trackedEXP.Length;
+			Array.Resize(ref trackedEXP, trackedEXP.Length * 2);
+
+			trackedEXP[index] = expNew;
+			return index;
 		}
 	}
 }

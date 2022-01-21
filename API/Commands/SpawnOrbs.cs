@@ -34,8 +34,8 @@ namespace AARPG.API.Commands{
 				return;
 			}
 
-			var index = ExperienceTracker.SpawnExperience((int)xp, caller.Player.Center + new Vector2(relX, relY), 6f, caller.Player.whoAmI);
-			caller.Reply($"Spawned {index.length} experience orbs!", Color.Green);
+			var indices = ExperienceTracker.SpawnExperience((int)xp, caller.Player.Center + new Vector2(relX, relY), 6f, caller.Player.whoAmI);
+			caller.Reply($"Spawned {indices.Length} experience orbs!", Color.Green);
 		}
 	}
 }

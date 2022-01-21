@@ -22,39 +22,13 @@ namespace AARPG.Core.Utility.Extensions{
 			float angleSource = source.ToRotation();
 			float angleDestination = destination.ToRotation();
 
-			//  +-------+
-			//  | S |   |
-			//  |---+---|
-			//  | D |   |
-			//  +-------+
-			if(angleSource < -MathHelper.PiOver2 && angleDestination > MathHelper.PiOver2)
-				angleSource += MathHelper.TwoPi;
-			//  +-------+
-			//  | D |   |
-			//  |---+---|
-			//  | S |   |
-			//  +-------+
-			else if(angleSource > MathHelper.PiOver2 && angleDestination < -MathHelper.PiOver2)
+			//Prevent spinning
+			if(angleSource - angleDestination > MathHelper.Pi)
 				angleDestination += MathHelper.TwoPi;
-			//  +-------+
-			//  | S |   |
-			//  |---+---|
-			//  |   | D |
-			//  +-------+
-			else if(angleSource < -MathHelper.PiOver2 && angleDestination < MathHelper.PiOver2 && angleDestination > 0)
+			else if(angleDestination - angleSource > MathHelper.Pi)
 				angleSource += MathHelper.TwoPi;
-			//  +-------+
-			//  |   | D |
-			//  |---+---|
-			//  | S |   |
-			//  +-------+
-			else if(angleSource > MathHelper.PiOver2 && angleDestination > -MathHelper.PiOver2 && angleDestination < 0)
-				angleDestination += MathHelper.TwoPi;
 
 			float diff = angleDestination - angleSource;
-			if(diff > MathHelper.Pi)
-				diff = MathHelper.TwoPi - diff;
-
 			if(diff > maxRadiansRotation)
 				diff = maxRadiansRotation;
 			else if(diff < -maxRadiansRotation)
