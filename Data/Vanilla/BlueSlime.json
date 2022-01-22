@@ -38,7 +38,8 @@
 						"flat": 0
 					}
 				}
-			}
+			},
+			"requirements": "PreHardmodeSurface"
 		},
 		{
 			"prefix": "Bulky",
@@ -78,7 +79,8 @@
 						"flat": -0.1
 					}
 				}
-			}
+			},
+			"requirements": "PreHardmodeSurface"
 		},
 		{
 			"prefix": "Tiny",
@@ -118,7 +120,8 @@
 						"flat": 0.15
 					}
 				}
-			}
+			},
+			"requirements": "PreHardmodeSurface"
 		}
 	]
 }

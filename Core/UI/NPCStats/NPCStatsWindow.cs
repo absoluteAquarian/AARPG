@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Terraria;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.UI.Elements;
@@ -8,7 +10,7 @@ using Terraria.UI;
 namespace AARPG.Core.UI.NPCStats{
 	public class NPCStatsWindow : UIPanel{
 		private readonly BestiaryEntry bestiaryEntry;
-		private UIElement entryPortrait;
+		private UIBestiaryEntryInfoPage display;
 
 		public NPCStatsWindow(int netID) : base(){
 			//Invisible panel
@@ -17,31 +19,28 @@ namespace AARPG.Core.UI.NPCStats{
 			SetPadding(0);
 			MarginTop = MarginLeft = MarginRight = MarginBottom = 0;
 
-			bestiaryEntry = Main.BestiaryDB.FindEntryByNPCID(netID);
-			
-			//Invalid entry
-			if(bestiaryEntry.Info.Count == 0)
-				throw new ArgumentException("Unknown NPC net ID detected: " + netID);
+			//Make a copy of what the final result would be, rather than access the entry itself
+			var clone = BestiaryEntry.Enemy(netID);
+			var npc = new NPC();
+			npc.SetDefaults(netID);
+			bestiaryEntry = new BestiaryEntry();
+			bestiaryEntry.Info.AddRange(
+				from info in new List<IBestiaryInfoElement>(clone.Info)
+				where info is NPCNetIdBestiaryInfoElement or NamePlateInfoElement or NPCPortraitInfoElement
+				select info);
+			bestiaryEntry.UIInfoProvider = new CommonEnemyUICollectionInfoProvider(npc.GetBestiaryCreditId(), quickUnlock: true);
+			bestiaryEntry.Icon = clone.Icon;
 		}
 
 		public override void OnInitialize(){
-			foreach(var info in bestiaryEntry.Info){
-				if(info is NPCPortraitInfoElement portrait){
-					entryPortrait = portrait.ProvideUIElement(new BestiaryUICollectionInfo(){
-						OwnerEntry = bestiaryEntry,
-						UnlockState = BestiaryEntryUnlockState.CanShowPortraitOnly_1
-					});
+			display = new UIBestiaryEntryInfoPage();
+			display.FillInfoForEntry(bestiaryEntry, default);
 
-					break;
-				}
-			}
-
-			if(entryPortrait is null)
-				throw new InvalidOperationException("Invalid bestiary entry");
-
-			entryPortrait.Left.Set(0, 0);
-			entryPortrait.Top.Set(0, 0);
-			Append(entryPortrait);
+			display.Left.Set(0, 0);
+			display.Top.Set(0, 0);
+			display.Width.Set(0, 0.45f);
+			display.Height.Set(0, 0.9f);
+			Append(display);
 		}
 	}
 }

@@ -35,8 +35,8 @@ namespace AARPG.Core.UI.NPCStats{
 		}
 
 		public override void OnInitialize(){
-			const int width = 400;
-			const int height = 350;
+			const int width = 650;
+			const int height = 500;
 
 			panel = new UIDragablePanel("NPC Statistics");
 			panel.Width.Set(width, 0);
@@ -55,24 +55,27 @@ namespace AARPG.Core.UI.NPCStats{
 			//Initialize NPC Stats window
 			scrollBar = new UIScrollbar();
 			scrollBar.Top.Set(0, 0.1f);
-			scrollBar.Left.Set(0, 0.45f);
+			scrollBar.Left.Set(0, 0.95f);
 			scrollBar.Width.Set(20, 0);
 			scrollBar.Height.Set(0, 0.825f);
 
 			var horizontalScrollBar = new UIHorizontalScrollbar();
 			horizontalScrollBar.Top.Set(0, 0.95f);
 			horizontalScrollBar.Left.Set(20, 0);
-			horizontalScrollBar.Width.Set(0, 0.41f);
+			horizontalScrollBar.Width.Set(0, 0.825f);
 			horizontalScrollBar.Height.Set(20, 0);
 
 			statsMenu = new BetterUIList();
 			statsMenu.SetScrollbar(scrollBar);
+			statsMenu.Append(scrollBar);
 			statsMenu.SetHorizontalScrollbar(horizontalScrollBar);
+			statsMenu.Append(horizontalScrollBar);
 			statsMenu.ListPadding = 10;
 			statsMenu.Top.Set(0, 0.1f);
 			statsMenu.Left.Set(0, 0.575f);
 			statsMenu.Width.Set(0, 0.475f);
 			statsMenu.Height.Set(0, 0.825f);
+			panel.Append(statsMenu);
 			/*
 			statsMenu = new VisibilityElement<BetterUIList>(subMenu, updateWhenNotVisible: false){
 				Visible = false
@@ -118,7 +121,7 @@ namespace AARPG.Core.UI.NPCStats{
 
 		public void SetNPCWindow(NPCStatisticsRegistry.Entry entry){
 			if(npcWindow is not null)
-				RemoveChild(npcWindow);
+				npcWindow.Remove();
 
 			currentEntry = entry;
 
@@ -128,6 +131,7 @@ namespace AARPG.Core.UI.NPCStats{
 			npcWindow.Top.Set(0.05f, 0);
 			npcWindow.Height.Set(0, 0.825f);
 			panel.Append(npcWindow);
+			npcWindow.Activate();
 
 			//statsMenu.Visible = true;
 			ToggleActive = true;

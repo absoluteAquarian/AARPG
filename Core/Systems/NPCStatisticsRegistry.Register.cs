@@ -122,12 +122,13 @@ disposeStreams:
 			CoreMod.Instance.Logger.Debug("AARPG project directory found.  Attempting to update Data folder...");
 
 			string pathsFile = Path.Combine(projectFolder, "paths.txt");
+			List<string> existingFiles = new(File.ReadAllLines(pathsFile));
 			List<string> files = new();
 			bool entryWasCreated = false;
 
 			ModNPC m = null;
 			var progressionDict = NPCProgressionRegistry.idsToProgressions;
-			foreach(string file in File.ReadAllLines(pathsFile)
+			foreach(string file in existingFiles
 				.Concat(NPCProgressionRegistry.idsToProgressions.Keys.Select(k => k < NPCID.Count
 					? "Vanilla/" + NPCID.Search.GetName(k)
 					: (m = NPCLoader.GetNPC(k)).Mod.Name + "/" + m.FullName[(m.FullName.IndexOf('.') + 1)..]))){
@@ -135,7 +136,10 @@ disposeStreams:
 				int id = -1;
 
 				string fullPath = Path.Combine(projectFolder, file) + ".json";
+
 				string modName = Path.GetDirectoryName(file);
+				Directory.CreateDirectory(Path.Combine(projectFolder, modName));
+
 				string npcName = Path.GetFileName(file);
 
 				bool isVanillaID = modName == "Vanilla" && NPCID.Search.TryGetId(npcName, out id);
@@ -180,7 +184,7 @@ disposeStreams:
 			}
 
 			//Update the paths file if any new entries were created
-			if(entryWasCreated){
+			if(entryWasCreated || existingFiles.Count != files.Count){
 				File.WriteAllLines(pathsFile, files);
 
 				CoreMod.Instance.Logger.Warn("New JSON entries have been created.  Re-building the mod will be required!");
