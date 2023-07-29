@@ -18,7 +18,8 @@ namespace AARPG.Core.NPCs{
 
 		internal bool DelayedStatAssignment{ get; private set; }
 
-		public override bool CloneNewInstances => true;
+		//--NEEDS LOOKING--//
+		//public override bool CloneNewInstances => true;
 
 		public override bool InstancePerEntity => true;
 
@@ -48,6 +49,9 @@ namespace AARPG.Core.NPCs{
 				return;
 			}else{
 				NPCStatisticsRegistry.Entry entry = NPCStatisticsRegistry.GetRandomStats(netID);
+                //--NEEDS LOOKING--//
+				//-- Entry was null on 1.4.3 loading which threw null reference --//
+                if (entry == null) { return; }
 				stats = entry?.stats;
 				namePrefix = entry.namePrefix is null ? "" : (entry.namePrefix + " ");
 			}

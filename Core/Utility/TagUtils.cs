@@ -18,8 +18,8 @@ namespace AARPG.Core.Utility{
 				throw new ArgumentException("Invalid tag: no Mod or Name specified");
 
 			if(mod == "Terraria"){
-				if(type == DamageClass.NoScaling.Name)
-					return DamageClass.NoScaling;
+				if(type == DamageClass.Default.Name)
+					return DamageClass.Default;
 				if(type == DamageClass.Generic.Name)
 					return DamageClass.Generic;
 				if(type == DamageClass.Melee.Name)
@@ -32,6 +32,8 @@ namespace AARPG.Core.Utility{
 					return DamageClass.Summon;
 				if(type == DamageClass.Throwing.Name)
 					return DamageClass.Throwing;
+				if(type == DamageClass.MeleeNoSpeed.Name)
+					return DamageClass.MeleeNoSpeed;
 
 				throw new ArgumentException($"Invalid damage class detected ({mod}:{type})");
 			}else if(ModLoader.TryGetMod(mod, out Mod inst)){

@@ -72,16 +72,17 @@ namespace AARPG.Core.Players{
 			stats.maxRunSpeedModifier.ApplyModifier(ref Player.accRunSpeed);
 		}
 
-		public override void ModifyWeaponCrit(Item item, ref int crit){
+		public override void ModifyWeaponCrit(Item item, ref float crit){
 			ref var data = ref stats.GetModifier(item.DamageType);
 			crit += data.crit;
 		}
 
-		public override void ModifyWeaponDamage(Item item, ref StatModifier damage, ref float flat){
+		//-- NEEDS LOOKING --//
+		//-- base ModifyWeaponDamage no longer contains flat --//
+		public override void ModifyWeaponDamage(Item item, ref StatModifier damage){
 			ref var data = ref stats.GetModifier(item.DamageType);
 			damage += data.modifier.add;
 			damage *= data.modifier.mult;
-			flat += data.modifier.flat;
 		}
 
 		public override float UseSpeedMultiplier(Item item)
