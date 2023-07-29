@@ -9,8 +9,10 @@ using Terraria.DataStructures;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 
-namespace AARPG.Core.Players{
-	public class StatPlayer : ModPlayer{
+namespace AARPG.Core.Players
+{
+	public class StatPlayer : ModPlayer
+	{
 		public PlayerStatistics stats;
 
 		public Dictionary<short, int> downedCountsByID;
@@ -21,11 +23,13 @@ namespace AARPG.Core.Players{
 		internal const int XPCollectTimerMax = 18;
 		internal Color xpCollectColor;
 
-		public override void SaveData(TagCompound tag){
+		public override void SaveData(TagCompound tag)
+		{
 			tag["stats"] = stats.SaveToTag();
 
 			List<TagCompound> tags = new();
-			foreach(var kvp in downedCountsByID){
+			foreach (var kvp in downedCountsByID)
+			{
 				TagCompound entry = new();
 				NPCUtils.SaveNPCToTag(entry, kvp.Key);
 				entry["count"] = kvp.Value;
@@ -36,7 +40,8 @@ namespace AARPG.Core.Players{
 			tag["downedCounts"] = tags;
 		}
 
-		public override void Initialize(){
+		public override void Initialize()
+		{
 			stats?.DeInitialize();
 			stats = new PlayerStatistics();
 
@@ -44,15 +49,18 @@ namespace AARPG.Core.Players{
 			unloaded = new();
 		}
 
-		public override void LoadData(TagCompound tag){
-			if(tag.GetCompound("stats") is TagCompound statTag)
+		public override void LoadData(TagCompound tag)
+		{
+			if (tag.GetCompound("stats") is TagCompound statTag)
 				stats.LoadFromTag(statTag);
 
-			if(tag.GetList<TagCompound>("downedCounts") is List<TagCompound> list){
-				foreach(var entry in list){
+			if (tag.GetList<TagCompound>("downedCounts") is List<TagCompound> list)
+			{
+				foreach (var entry in list)
+				{
 					short type = NPCUtils.LoadNPCFromTag(entry, unloaded);
 
-					if(type == -1)
+					if (type == -1)
 						continue;
 
 					downedCountsByID.Add(type, entry.GetInt("count"));
@@ -60,26 +68,30 @@ namespace AARPG.Core.Players{
 			}
 		}
 
-		public override void PostUpdateMiscEffects(){
+		public override void PostUpdateMiscEffects()
+		{
 			stats.healthModifier.ApplyModifier(ref Player.statLifeMax2);
 			stats.defenseModifier.ApplyModifier(ref Player.statDefense);
 			stats.enduranceModifier.ApplyModifier(ref Player.endurance);
 		}
 
-		public override void PostUpdateRunSpeeds(){
+		public override void PostUpdateRunSpeeds()
+		{
 			stats.runAccelerationModifier.ApplyModifier(ref Player.runAcceleration);
 			stats.maxRunSpeedModifier.ApplyModifier(ref Player.maxRunSpeed);
 			stats.maxRunSpeedModifier.ApplyModifier(ref Player.accRunSpeed);
 		}
 
-		public override void ModifyWeaponCrit(Item item, ref float crit){
+		public override void ModifyWeaponCrit(Item item, ref float crit)
+		{
 			ref var data = ref stats.GetModifier(item.DamageType);
 			crit += data.crit;
 		}
 
 		//-- NEEDS LOOKING --//
 		//-- base ModifyWeaponDamage no longer contains flat --//
-		public override void ModifyWeaponDamage(Item item, ref StatModifier damage){
+		public override void ModifyWeaponDamage(Item item, ref StatModifier damage)
+		{
 			ref var data = ref stats.GetModifier(item.DamageType);
 			damage += data.modifier.add;
 			damage *= data.modifier.mult;
@@ -90,19 +102,24 @@ namespace AARPG.Core.Players{
 
 		private int lastUpdate = -1;
 
-		public override void DrawEffects(PlayerDrawSet drawInfo, ref float r, ref float g, ref float b, ref float a, ref bool fullBright){
-			if(lastUpdate != Main.GameUpdateCount && xpCollectFlashTimer >= 0){
+		public override void DrawEffects(PlayerDrawSet drawInfo, ref float r, ref float g, ref float b, ref float a,
+			ref bool fullBright)
+		{
+			if (lastUpdate != Main.GameUpdateCount && xpCollectFlashTimer >= 0)
+			{
 				xpCollectFlashTimer--;
-				if(xpCollectFlashTimer <= 0)
+				if (xpCollectFlashTimer <= 0)
 					xpCollectColor = default;
 			}
-			
-			if(drawInfo.shadow != 0)
+
+			if (drawInfo.shadow != 0)
 				return;
 
 			Vector3 current = new Vector3(r, g, b);
-			if(xpCollectFlashTimer >= 0 && xpCollectColor != default){
-				current = Vector3.Lerp(current, xpCollectColor.ToVector3(), xpCollectFlashTimer / (float)XPCollectTimerMax);
+			if (xpCollectFlashTimer >= 0 && xpCollectColor != default)
+			{
+				current = Vector3.Lerp(current, xpCollectColor.ToVector3(),
+					xpCollectFlashTimer / (float)XPCollectTimerMax);
 				r = current.X;
 				g = current.Y;
 				b = current.Z;
